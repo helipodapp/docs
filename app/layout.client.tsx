@@ -9,7 +9,7 @@ export function Body({ children }: { children: ReactNode }): React.ReactElement 
   const mode = useMode();
 
   return (
-    <body className={cn(mode ?? 'framework', 'relative flex min-h-screen flex-col')}>
+    <body className={cn(mode ?? 'helipod', 'relative flex min-h-screen flex-col')}>
       {children}
     </body>
   );
