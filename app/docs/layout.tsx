@@ -22,7 +22,7 @@ export default function Layout({ children }: LayoutProps<'/docs'>) {
         ...base.nav,
         title: (
           <>
-            <HelipodLogo size={20} />
+            {logo}
             <span className="font-medium in-[.uwu]:hidden max-md:hidden">
               Helipod Docs
             </span>
