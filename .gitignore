@@ -27,3 +27,5 @@ public/og/
 # Local backup copies
 * copy.*
 * copy */
+
+pnpm-lock.yaml
