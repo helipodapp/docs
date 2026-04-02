@@ -1,0 +1,132 @@
+---
+title: Advanced Usage
+description: Learn advanced Helipod concepts for build, networking, integrations, and observability.
+icon: Settings2
+---
+
+import { RocketIcon, NetworkIcon, PlugZapIcon, WaypointsIcon, EyeIcon } from 'lucide-react';
+
+Helipod is designed to stay simple for the common path, but the platform also gives you room to tune behavior when you need more control.
+
+This guide covers the advanced topics that matter most once your app is live:
+
+<Cards>
+  <Card icon={<RocketIcon className="text-green-500" />} title="Build and Deploy Options" href="/advanced-usage#build-and-deploy-options">
+    Tune build commands, deploy behavior, health checks, and scheduling.
+  </Card>
+  <Card icon={<NetworkIcon className="text-blue-500" />} title="Networking" href="/advanced-usage#networking">
+    Use private networking and public domains to connect services safely.
+  </Card>
+  <Card icon={<PlugZapIcon className="text-orange-500" />} title="Integrations" href="/advanced-usage#integrations">
+    Extend Helipod with the CLI, public API, and webhooks.
+  </Card>
+  <Card icon={<WaypointsIcon className="text-purple-500" />} title="Environments" href="/advanced-usage#environments">
+    Split development, staging, and production without mixing workloads.
+  </Card>
+  <Card icon={<EyeIcon className="text-rose-500" />} title="Observability" href="/advanced-usage#observability">
+    Monitor builds, deployments, logs, and runtime behavior.
+  </Card>
+</Cards>
+
+## Build and deploy options
+
+Helipod applies sensible defaults for most services, but advanced workloads often benefit from explicit configuration.
+
+### Build options
+
+Under the hood, Helipod builds your source into a container image with minimal setup. When you need more control, adjust the service build settings.
+
+Common settings to review:
+
+- **Custom build command** - Override the default build step when your app uses a non-standard build flow.
+- **Pre-deploy command** - Run tasks before the main start command, such as migrations or asset preparation.
+- **Custom start command** - Replace the default launch command when your runtime requires a specific entrypoint.
+
+### Deploy options
+
+Helipod also lets you shape how deployments run and where they run.
+
+Useful deployment settings include:
+
+- **Replicas** - Run multiple instances of the same service when you need scale or resilience.
+- **Deployment region** - Pick the region that best matches your users or dependencies.
+- **Scheduled executions** - Run services on a schedule for jobs, maintenance tasks, or recurring workflows.
+- **Serverless behavior** - Pause idle services when they do not need to keep running.
+- **Health checks** - Validate that a new deployment is ready before traffic fully shifts to it.
+
+## Networking
+
+Helipod networking is built to support both internal service communication and public access.
+
+### Private networking
+
+Use private networking when services inside the same project need to talk to each other.
+
+This is the preferred option for:
+
+- Backend to database traffic
+- Internal APIs
+- Cache access
+- Service-to-service communication that should not be public
+
+Prefer private variables and service references when connecting internal services.
+
+### Public domains
+
+When your service needs to be reachable from the internet, use a Helipod-provided domain or attach a custom domain.
+
+Helipod can help you expose the correct port, provision SSL, and keep the public endpoint accessible without extra setup.
+
+## Integrations
+
+You can interact with Helipod outside the dashboard when your workflow needs automation.
+
+### CLI
+
+Use the CLI to:
+
+- Trigger deployments from the terminal
+- Run services locally with project variables
+- Create and manage projects from your machine
+- Deploy templates from the command line
+
+### Public API
+
+Helipod exposes a public API for programmatic workflows, automation, and custom tooling.
+
+Use it when you want to sync deployment state, build internal tools, or integrate Helipod into your own systems.
+
+### Webhooks
+
+Webhooks let your services send events to external tools when deployments or project activity changes.
+
+They are useful for alerts, notifications, and automation that should react to Helipod activity in real time.
+
+## Environments
+
+Use separate environments when you want isolation between development, staging, and production.
+
+That setup helps you:
+
+- Test changes without touching production
+- Mirror production behavior for team members
+- Assign different branches to different environments
+
+## Observability
+
+Helipod logs help you understand what happened during builds and runtime.
+
+Check these areas when debugging:
+
+- **Build logs** - Output from the build process
+- **Deploy logs** - Output from service startup and deployment
+- **Runtime logs** - Application logs while the service is running
+- **Metrics** - CPU, memory, and other usage signals
+
+## What next?
+
+If you want to go deeper, continue with:
+
+- [Quick Start](/quick-start)
+- [The Basics](/the-basics)
+- [Best Practices](/best-practices)

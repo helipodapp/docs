@@ -1,0 +1,145 @@
+---
+title: Production Readiness Checklist
+description: Prepare your Helipod app for production with practical checks for reliability, security, and operations.
+icon: ShieldCheck
+---
+
+import { GaugeIcon, BellRingIcon, FlaskConicalIcon, LockIcon, LifeBuoyIcon } from 'lucide-react';
+
+_Is your application ready for production?_
+
+This checklist focuses on the operational areas that matter most once your Helipod app is live. Use it as a practical pre-launch pass before you rely on the app in production.
+
+<Callout title="Production checklist">
+  Start with performance and security, then validate observability, rollback, and recovery paths before shipping.
+</Callout>
+
+This checklist is organized around the five areas that matter most:
+
+<Cards>
+  <Card icon={<GaugeIcon className="text-green-500" />} title="Performance and Reliability" href="#performance-and-reliability">
+    Tune regions, replicas, and service behavior so your app stays fast and available.
+  </Card>
+  <Card icon={<BellRingIcon className="text-blue-500" />} title="Observability and Monitoring" href="#observability-and-monitoring">
+    Make sure you can see logs, metrics, and alerts before problems grow.
+  </Card>
+  <Card icon={<FlaskConicalIcon className="text-orange-500" />} title="Quality Assurance" href="#quality-assurance">
+    Put guardrails in place so changes are tested before production deploys.
+  </Card>
+  <Card icon={<LockIcon className="text-purple-500" />} title="Security" href="#security">
+    Protect sensitive data and keep internal services off the public internet when possible.
+  </Card>
+  <Card icon={<LifeBuoyIcon className="text-rose-500" />} title="Disaster Recovery" href="#disaster-recovery">
+    Plan for region outages, data loss, and rollback scenarios.
+  </Card>
+</Cards>
+
+## Performance and reliability
+
+Production services should stay responsive under load and tolerate failure gracefully.
+
+<Callout title="Helipod tip">
+  Keep latency low by placing services close to users and keeping internal traffic inside the project network.
+</Callout>
+
+**Do this:**
+
+- Deploy services in the region closest to your users when latency matters.
+- Keep related services in the same project so they can use private networking.
+- Set replicas where uptime matters and a single instance is not enough.
+- Review memory and CPU usage regularly so you do not outgrow your plan unexpectedly.
+- Add a health check path for services that need a readiness signal before traffic moves over.
+- Use a pre-deploy command for migrations or other required startup work.
+
+**Why:**
+
+These choices reduce latency, avoid unnecessary public traffic, and make the system more resilient when one instance or one dependency has problems.
+
+## Observability and monitoring
+
+If you cannot see what your service is doing, production issues take longer to fix.
+
+<Callout title="What to watch">
+  Make logs and metrics part of your release routine, not something you only open during an incident.
+</Callout>
+
+**Do this:**
+
+- Check build logs when a deploy fails.
+- Check app logs when the service starts but does not behave correctly.
+- Watch metrics for CPU, memory, and traffic spikes.
+- Use alerts or notifications for deployment failures and service changes.
+- Keep log access part of your incident response workflow.
+
+**Why:**
+
+Helipod can only help you troubleshoot quickly if logs and metrics are part of your operating routine.
+
+## Quality assurance
+
+Production-ready changes should be validated before they reach users.
+
+<Callout title="Safe releases">
+  Separate environments and a predictable deploy flow make it much easier to catch issues before production.
+</Callout>
+
+**Do this:**
+
+- Use separate environments for development, staging, and production.
+- Test critical changes in a non-production environment first.
+- Keep your deployment setup repeatable with documented commands and variables.
+- Review rollback options before you need them.
+- Use templates or config conventions for repeatable service stacks.
+
+**Why:**
+
+A structured release path lowers the chance that a bad change reaches the live environment.
+
+## Security
+
+Production systems should minimize exposed surface area and keep sensitive data protected.
+
+<Callout title="Reduce exposure">
+  Prefer private networking and service variables whenever the traffic does not need to be public.
+</Callout>
+
+**Do this:**
+
+- Prefer private networking for internal service-to-service communication.
+- Keep database and cache endpoints off the public internet unless they truly need exposure.
+- Store secrets in service variables, not in source code.
+- Use custom domains and TLS for public traffic.
+- Put external protection in front of public services when appropriate.
+
+**Why:**
+
+Smaller exposure means fewer opportunities for accidental leaks or public abuse.
+
+## Disaster recovery
+
+Assume something will eventually fail and prepare for it.
+
+<Callout title="Plan for failure">
+  Backups and rollback steps should be ready before you need them.
+</Callout>
+
+**Do this:**
+
+- Keep regular backups for services that store persistent data.
+- Know how to restore data before you need it.
+- Use more than one region for high-value workloads when uptime matters.
+- Keep a rollback plan for deployments that introduce regressions.
+- Document the services that must come back first during an incident.
+
+**Why:**
+
+Recovery is much faster when you already know where your backups live and how the app should be brought back online.
+
+## Next step
+
+If you want to keep going, read:
+
+- [Quick Start](/quick-start)
+- [The Basics](/the-basics)
+- [Best Practices](/best-practices)
+- [Advanced Usage](/advanced-usage)

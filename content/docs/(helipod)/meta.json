@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../.source/json-schema/docs.meta.json",
+  "root": true,
+  "title": "Helipod",
+  "description": "Deploy your app, no hassle.",
+  "icon": "Terminal",
+  "pages": [
+    "quick-start",
+    "the-basics",
+    "best-practices",
+    "advanced-usage",
+    "production-readiness"
+  ]
+}

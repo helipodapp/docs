@@ -1,0 +1,150 @@
+---
+title: The Basics
+description: Learn the core concepts of Helipod.
+icon: Lightbulb
+---
+
+This page explains the key building blocks in Helipod so you can navigate the platform faster and understand how everything connects.
+
+## In a nutshell
+
+- **[Dashboard](#dashboard--projects)** - Main entry point for all your projects.
+- **[Project](#project--project-canvas)** - A workspace for services under one topology.
+  - **[Project Settings](#project-settings)** - Project-level controls and configuration.
+- **[Service](#services)** - A deploy target for source code or container images.
+  - **[Service Variables](#service-variables)** - Runtime configuration and secrets.
+  - **[Service Metrics](#service-metrics)** - CPU, memory, and traffic visibility.
+  - **[Service Settings](#service-settings)** - Service-level deployment and runtime options.
+- **[Deployment](#deployments)** - A build/release instance of a service.
+- **[Volumes](#volumes)** - Persistent storage attached to services.
+  - **[Volume Metrics](#volume-metrics)** - Storage usage over time.
+  - **[Volume Settings](#volume-settings)** - Mount path, capacity, and volume operations.
+
+## Dashboard / projects
+
+Dashboard is your primary view in Helipod where projects are listed and opened.
+
+Projects group your services, environments, and deployment history in one place.
+
+{/* IMAGE PLACEHOLDER: dashboard overview */}
+{/* Replace with: /docs/helipod/placeholder-basics-dashboard.png */}
+
+## Project / project canvas
+
+A project is a container for your application stack. Think of it as a boundary that organizes services, networking, and deployments for one application or product area.
+
+The **Project Canvas** is where you inspect current service states and trigger operational actions.
+
+{/* IMAGE PLACEHOLDER: project canvas */}
+{/* Replace with: /docs/helipod/placeholder-basics-project-canvas.png */}
+
+### Project settings
+
+Project settings contain controls that apply across the project scope.
+
+Common actions:
+
+- Manage environments
+- Manage members and access
+- Configure project-wide defaults
+- Archive or delete project resources
+
+{/* IMAGE PLACEHOLDER: project settings */}
+{/* Replace with: /docs/helipod/placeholder-basics-project-settings.png */}
+
+## Services
+
+A service is the compute unit Helipod deploys.
+
+You can create services from:
+
+- GitHub/GitLab repositories
+- Container images
+- Templates
+
+Each service has its own runtime lifecycle, deployments, logs, and settings.
+
+{/* IMAGE PLACEHOLDER: services on canvas */}
+{/* Replace with: /docs/helipod/placeholder-basics-services.png */}
+
+### Service variables
+
+Service Variables are used for runtime configuration and secrets.
+
+Use variables for API keys, database URLs, feature flags, and environment-specific values.
+
+{/* IMAGE PLACEHOLDER: service variables tab */}
+{/* Replace with: /docs/helipod/placeholder-basics-service-variables.png */}
+
+### Service metrics
+
+Service Metrics give you a quick health snapshot:
+
+- CPU usage
+- Memory usage
+- Network activity
+- Runtime trends
+
+{/* IMAGE PLACEHOLDER: service metrics tab */}
+{/* Replace with: /docs/helipod/placeholder-basics-service-metrics.png */}
+
+### Service settings
+
+Service settings control deployment behavior and runtime options.
+
+Common configurations:
+
+- Source branch or image reference
+- Build/start command overrides
+- Resource sizing
+- Domain/networking integration
+
+{/* IMAGE PLACEHOLDER: service settings tab */}
+{/* Replace with: /docs/helipod/placeholder-basics-service-settings.png */}
+
+## Deployments
+
+Deployments are release events produced from a service source.
+
+Each deployment includes build output, status, and logs, so you can validate success or troubleshoot failures quickly.
+
+{/* IMAGE PLACEHOLDER: deployment detail */}
+{/* Replace with: /docs/helipod/placeholder-basics-deployments.png */}
+
+## Volumes
+
+Volumes provide persistent storage for services that need to retain data between restarts or redeploys.
+
+Use volumes for uploaded files, local state, and data directories that must survive runtime changes.
+
+{/* IMAGE PLACEHOLDER: volume on canvas */}
+{/* Replace with: /docs/helipod/placeholder-basics-volumes.png */}
+
+### Volume metrics
+
+Volume Metrics show storage usage and growth trends, helping you plan capacity.
+
+{/* IMAGE PLACEHOLDER: volume metrics tab */}
+{/* Replace with: /docs/helipod/placeholder-basics-volume-metrics.png */}
+
+### Volume settings
+
+Volume settings provide storage-level operations and controls.
+
+Common actions:
+
+- Configure mount path
+- Check or expand capacity
+- Wipe volume data when required
+
+{/* IMAGE PLACEHOLDER: volume settings tab */}
+{/* Replace with: /docs/helipod/placeholder-basics-volume-settings.png */}
+
+## What next?
+
+After understanding the fundamentals, continue with:
+
+- [Quick Start](/helipod/quick-start)
+- [Project Canvas](/helipod/project-canvas)
+- [Deployments](/helipod/deployments)
+- [Variables](/helipod/variables)

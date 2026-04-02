@@ -1,0 +1,29 @@
+out
+content/docs/openapi/**/*.mdx
+!content/docs/openapi/index.mdx
+
+public/r
+public/registry
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Local tooling config
+.oxlintrc.json
+
+# Dependencies and build output
+node_modules/
+.next/
+.turbo/
+.cache/
+
+# Generated source and docs artifacts
+.source/
+public/registry/
+public/og/
+
+# Local backup copies
+* copy.*
+* copy */

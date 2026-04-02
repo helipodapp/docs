@@ -1,0 +1,139 @@
+---
+title: Quick Start
+description: Get started with Helipod in minutes
+icon: Rocket
+---
+
+import { GitBranchIcon, ArchiveIcon } from 'lucide-react';
+
+## Introduction
+
+Helipod is a **container deployment platform** that helps you deploy and manage applications quickly.
+
+For now, Quick Start focuses on two deployment paths:
+
+<Cards>
+
+<Card icon={<GitBranchIcon className="text-blue-500" />} title='Deploy from GitHub/GitLab' href='/quick-start#deploy-from-githubgitlab'>
+
+Connect your Git repository and deploy automatically.
+
+</Card>
+
+<Card icon={<ArchiveIcon className="text-purple-500" />} title='Deploy from Template' href='/quick-start#deploy-from-template'>
+
+Launch pre-configured software in a few clicks.
+
+</Card>
+
+
+</Cards>
+
+<Callout title="Quick Scope">
+  This page intentionally covers only GitHub/GitLab and Template deployment.
+</Callout>
+
+## Table of Contents
+
+1. **Deploying your project**
+
+   **[Option 1](/quick-start#deploy-from-githubgitlab)** - Deploy from **GitHub/GitLab**
+
+2. **Deploying from template**
+
+   **[Option 2](/quick-start#deploy-from-template)** - Deploy from **Template**
+
+## Deploy from GitHub/GitLab
+
+Use this flow if your code is already in GitHub or GitLab.
+
+### Step 1: Create Project
+
+- Open **Dashboard**
+- Click **New Project**
+- Choose **GitHub** or **GitLab**
+
+{/* IMAGE PLACEHOLDER: project provider selection */}
+{/* Replace with: /docs/helipod/placeholder-git-provider.png */}
+
+### Step 2: Choose Repository
+
+- Search repository
+- Select repository and branch
+- Continue to deploy setup
+
+{/* IMAGE PLACEHOLDER: repository list */}
+{/* Replace with: /docs/helipod/placeholder-repository-select.png */}
+
+### Step 3: Deploy
+
+- Click **Deploy Now** for direct deploy
+- Or click **Add Variables** first, then deploy
+
+{/* IMAGE PLACEHOLDER: ready to deploy state */}
+{/* Replace with: /docs/helipod/placeholder-ready-deploy.png */}
+
+### Step 4: Verify Running Service
+
+- Open project canvas
+- Check deployment status
+- Open service domain
+
+{/* IMAGE PLACEHOLDER: running deployment on canvas */}
+{/* Replace with: /docs/helipod/placeholder-running-service.png */}
+
+## Deploy from Template
+
+Use template deployment when you want to launch pre-configured stacks quickly.
+
+### Step 1: Open Template Flow
+
+- Open **Dashboard**
+- Click **New Project**
+- Choose **Deploy from Template**
+
+{/* IMAGE PLACEHOLDER: template option */}
+{/* Replace with: /docs/helipod/placeholder-template-option.png */}
+
+### Step 2: Select Template
+
+- Search template catalog
+- Select desired template
+
+{/* IMAGE PLACEHOLDER: template selection */}
+{/* Replace with: /docs/helipod/placeholder-template-select.png */}
+
+### Step 3: Configure and Deploy
+
+- Fill required inputs (if any)
+- Click **Deploy**
+
+{/* IMAGE PLACEHOLDER: template configuration */}
+{/* Replace with: /docs/helipod/placeholder-template-config.png */}
+
+### Step 4: Validate Result
+
+- Confirm project created
+- Check services are healthy
+- Access deployed app
+
+{/* IMAGE PLACEHOLDER: template deployed on canvas */}
+{/* Replace with: /docs/helipod/placeholder-template-deployed.png */}
+
+## FAQ
+
+<Accordions>
+  <Accordion id='git-provider' title="GitHub and GitLab steps look the same, is that expected?">
+    Yes. For Quick Start, both providers use the same deployment flow in Helipod.
+  </Accordion>
+
+  <Accordion id='where-add-images' title="Where should I put screenshots later?">
+    Save all images under /public/docs/helipod, then replace each placeholder comment with a markdown image line.
+  </Accordion>
+</Accordions>
+
+## Next
+
+- Continue to [Project Canvas](/helipod/project-canvas)
+- Continue to [Variables](/helipod/variables)
+- Continue to [Domains](/helipod/domains)

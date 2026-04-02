@@ -1,0 +1,134 @@
+---
+title: Best Practices
+description: Learn best practices to get the most from Helipod deployments.
+icon: Star
+---
+
+Helipod is a flexible platform, but some approaches work better than others for most scenarios. These practices help you maximize deployment efficiency, performance, and cost.
+
+## Organize services in single projects
+
+A **project** groups related services under one topology. Rather than creating separate projects for each service, keep your application stack together.
+
+**Why this matters:**
+
+- **Private networking** - Services in the same project can communicate privately without exposing ports or incurring egress charges.
+- **Cleaner dashboard** - Multiple projects clutter your project list quickly.
+- **Easier variable management** - Share configuration between services without manual duplication.
+
+**How to do it:**
+
+When adding another service (database, cache, etc.), look for the **Create** button at the top of the project canvas instead of going back to the dashboard. This keeps everything in one project.
+
+{/* IMAGE PLACEHOLDER: multiple services in one project */}
+{/* Replace with: /docs/helipod/placeholder-practices-services-project.png */}
+
+## Use private networking
+
+Services in the same project are automatically connected via private networking, allowing direct inter-service communication without exposing them publicly.
+
+**When to use:**
+
+- Backend-to-database communication
+- Cache service access
+- Internal API calls between services
+
+**Best practice:**
+
+Use private domain environment variables when available. For example:
+
+- `DATABASE_URL` (private by default)
+- `REDIS_HOST` (private by default)
+- Service reference variables like `${{BackendService.RAILWAY_PRIVATE_DOMAIN}}`
+
+**Why it matters:**
+
+Private networking is faster, more secure, and eliminates service-to-service egress costs.
+
+{/* IMAGE PLACEHOLDER: private networking configuration */}
+{/* Replace with: /docs/helipod/placeholder-practices-private-network.png */}
+
+## Reference variables for dynamic configuration
+
+Instead of hard-coding URLs and credentials, use reference variables to link configuration between services.
+
+**Example:**
+
+```
+BACKEND_URL=${{BackendService.RAILWAY_PUBLIC_DOMAIN}}
+DATABASE_URL=${{PostgresService.DATABASE_URL}}
+```
+
+**Why this works:**
+
+- **Automatic sync** - Change a domain or credential in one place, all references update.
+- **Less manual work** - No copy-paste errors.
+- **Environment safety** - Credentials stay in Helipod, never hardcoded in code.
+
+{/* IMAGE PLACEHOLDER: reference variable in use */}
+{/* Replace with: /docs/helipod/placeholder-practices-ref-vars.png */}
+
+## Manage secrets separately
+
+Never commit API keys, credentials, or tokens to your repository. Always use environment variables.
+
+**How:**
+
+1. Go to **Variables** tab in your service
+2. Toggle **Secret** for sensitive values
+3. Reference in code via environment variable (e.g., `process.env.API_KEY`)
+
+{/* IMAGE PLACEHOLDER: secrets tab */}
+{/* Replace with: /docs/helipod/placeholder-practices-secrets.png */}
+
+## Monitor logs and metrics regularly
+
+Build and deployment logs are your first line of troubleshooting.
+
+**Check these when debugging:**
+
+- **Build Logs** - Build errors, dependency issues
+- **App Logs** - Runtime errors, application output
+- **Metrics** - CPU, memory, and network spikes
+
+Most issues show up in logs before they become problems. Regular review catches issues early.
+
+{/* IMAGE PLACEHOLDER: logs and metrics dashboard */}
+{/* Replace with: /docs/helipod/placeholder-practices-logs.png */}
+
+## Keep deployment sizes lean
+
+Smaller deployments = faster builds and less resource consumption.
+
+**Tips:**
+
+- Exclude unnecessary files (node_modules, build artifacts, etc. via `.dockerignore`)
+- Use multi-stage builds to reduce image size
+- Remove unused dependencies before deploying
+
+## Use templates for repeatable stacks
+
+If you deploy the same stack frequently (e.g., Node.js + PostgreSQL), create or use a template.
+
+Templates save time and ensure consistency across deployments.
+
+{/* IMAGE PLACEHOLDER: template deployment */}
+{/* Replace with: /docs/helipod/placeholder-practices-templates.png */}
+
+## Set resource limits appropriately
+
+Avoid setting resources too high "just in case." Right-size based on actual needs.
+
+**How:**
+
+- Start with default sizing
+- Monitor actual usage via Metrics
+- Adjust up or down as needed
+
+This keeps costs down while maintaining performance.
+
+## Next steps
+
+- Learn more about [Variables](/helipod/variables)
+- Explore [Project Canvas](/helipod/project-canvas)
+- Check [Deployments](/helipod/deployments) best practices
