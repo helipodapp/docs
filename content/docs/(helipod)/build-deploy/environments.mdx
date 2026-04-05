@@ -1,0 +1,121 @@
+---
+title: Environments
+description: Manage multi-stage workflows on Helipod using isolated environments for development, preview, staging, and production.
+icon: Layers
+---
+
+Helipod environments let teams run the same project topology across multiple isolated stages. This makes it possible to test changes safely before they ever touch production.
+
+## How environments work in Helipod
+
+Every new project starts with a default production environment.
+
+Additional environments can be created at any time, and service-level changes remain scoped to the currently selected environment. In practice, this means you can tune variables, build behavior, and deploy settings in one stage without affecting others.
+
+## Environment types
+
+### Persistent environments
+
+Persistent environments are long-lived and ideal for stages such as:
+
+- `staging`
+- `qa`
+- `dev-shared`
+
+They are commonly wired to different branches or release channels and keep their own variables and runtime settings.
+
+### PR / Preview environments
+
+Preview environments are temporary, created for pull requests or short-lived review flows. They are automatically removed when the review context ends (for example, after merge or close), depending on your project settings.
+
+## Typical use cases
+
+Teams commonly use environments to:
+
+- test risky changes away from production,
+- give each team or stream an isolated test stage,
+- map branch strategies (e.g. `staging` branch to staging environment),
+- validate deploy behavior before production rollout.
+
+## Create a new environment
+
+From the environment switcher or project settings:
+
+1. Choose **New Environment**.
+2. Select creation mode:
+   - **Duplicate Environment**: clones services, variables, and config from a source environment.
+   - **Empty Environment**: starts with no services so you can build from scratch.
+3. Review staged changes and deploy when ready.
+
+If you duplicate an environment, Helipod prepares those changes as a staged set so your team can confirm what will be applied.
+
+## Sync environments
+
+Sync helps you import service changes from one environment to another in a controlled way.
+
+Recommended flow:
+
+1. Switch to the environment that should receive changes.
+2. Trigger **Sync** from the canvas controls.
+3. Pick the source environment.
+4. Review diff labels on service cards (new/changed/removed).
+5. Open staged changes and verify expected impact.
+6. Deploy the staged set.
+
+This pattern is useful for promoting tested changes from staging into production with explicit review.
+
+## Preview environment behavior
+
+When preview environments are enabled, Helipod can automatically spin up isolated deployments for incoming pull requests.
+
+### Why a PR might not deploy
+
+Common causes include:
+
+- PR author is not recognized in project/workspace access rules,
+- repository integration is incomplete,
+- required approvals or checks have not passed.
+
+### Domains in preview environments
+
+Automatic preview domains depend on base environment domain configuration. Ensure base services are correctly configured for managed domain assignment.
+
+### Focused preview deployments
+
+For multi-service or monorepo projects, focused preview deployments can deploy only affected services plus required dependencies. This reduces spin-up time and resource consumption.
+
+### Bot-generated pull requests
+
+Helipod can also support automated preview creation for bot-driven PRs when this option is enabled in environment settings.
+
+## Environment access control (RBAC)
+
+For sensitive environments such as production, environment-level permissions allow teams to restrict visibility and modification access while keeping deployment workflows auditable.
+
+Use RBAC to ensure:
+
+- only authorized members can open sensitive logs/variables,
+- production configuration edits are protected,
+- compliance boundaries are easier to enforce.
+
+## Legacy and migration notes
+
+If your team previously used older environment patterns, prefer the current isolated-environment + sync workflow for clarity and safer change promotion.
+
+## Troubleshooting
+
+If environment behavior looks incorrect:
+
+- verify current environment selection,
+- check staged changes before deploy,
+- confirm branch/source mappings,
+- validate access permissions,
+- review deployment logs for the affected service.
+
+Need help? Use [forum.helipod.app](https://forum.helipod.app) or your configured support channel.
+
+## Next
+
+- Back to [Build & Deploy](/build-deploy)
+- Continue to [Services](/build-deploy/services)
+- Review [Support](/platform/support)

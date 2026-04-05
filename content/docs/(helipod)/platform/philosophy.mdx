@@ -1,0 +1,61 @@
+---
+title: Philosophy
+description: The core principles behind Helipod's fast, flexible, and sustainable deployment platform.
+icon: Compass
+---
+
+Helipod is built around one goal: helping engineering teams deliver software faster without sacrificing stability.
+
+We view the application lifecycle as three recurring phases:
+
+- Development
+- Deployment
+- Diagnosis
+
+Helipod features are designed so these phases feel like one connected workflow rather than disconnected tools.
+
+## Objective
+
+This page explains the thinking behind Helipod product decisions. The goal is simple: help teams decide whether Helipod is a strong fit for their technical and operational needs.
+
+We believe product transparency matters more than marketing claims.
+
+## Product philosophy
+
+### Take what you need
+
+Helipod is designed to be usable from day one. Connect source code, deploy, and make services accessible without a long setup process.
+
+For many teams, this approach is enough to release quickly and safely.
+
+### Leave what you don't
+
+Every team has different architecture and pipeline preferences, so Helipod keeps room for integration:
+
+- Use the built-in platform flow when speed is the priority.
+- Add CLI/API into internal pipelines when you need deeper control.
+- Integrate existing workflows without rewriting your team process from scratch.
+
+## High-level architecture
+
+At a high level, Helipod turns source into running workloads and provides routing and observability layers on top.
+
+- **Build Layer**: Ingests source or images and produces deployment artifacts.
+- **Deployment Layer**: Runs services and maintains runtime state.
+- **Routing Layer**: Manages public endpoints and internal service communication.
+- **Observability Layer**: Provides logs and metrics for operational diagnosis.
+- **Control Layer**: Dashboard, API, and automation surfaces for lifecycle management.
+
+## Operational procedures
+
+Helipod relies on active monitoring, alerting, and operational runbooks to maintain platform availability. Feature improvements are evaluated with customer workload reliability in mind.
+
+## Do I need to change how I write code?
+
+No. Helipod is designed to work with the stack you already use today. You are free to choose frameworks, deployment patterns, and supporting tools that best fit your team.
+
+## Next
+
+- Back to [Platform](/platform)
+- Read [Advanced Usage](/advanced-usage)
+- Start with [Quick Start](/quick-start)

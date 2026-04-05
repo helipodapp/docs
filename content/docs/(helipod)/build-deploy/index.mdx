@@ -1,0 +1,111 @@
+---
+title: Build & Deploy
+description: Learn how to build, configure, and deploy applications on Helipod with services, environments, variables, and release controls.
+---
+
+Helipod gives teams a single operational surface for turning source code or container images into running workloads.
+
+In practice, Build & Deploy on Helipod combines three concerns:
+
+- compute shape (what runs and for how long),
+- runtime configuration (what values and secrets are available),
+- rollout behavior (how builds become production traffic).
+
+## Compute primitives
+
+| Topic | Description |
+| ----- | ----------- |
+| [**Services**](/build-deploy/services) | Long-running workloads such as APIs, web apps, workers, and stateful internal tools. |
+| [**Scheduled Jobs**](#scheduled-jobs) | Task-oriented workloads triggered on a defined schedule and expected to finish. |
+| [**Functions**](#functions) | Lightweight execution units for focused logic, automation, or integration handlers. |
+
+### Scheduled jobs
+
+Use scheduled jobs for recurring operational tasks like cleanup routines, data syncs, report generation, or maintenance scripts.
+
+### Functions
+
+Functions are a good fit for short-lived logic that does not need a dedicated always-on service lifecycle.
+
+## Configuration
+
+| Topic | Description |
+| ----- | ----------- |
+| [**Environments**](/build-deploy/environments) | Isolate development, staging, preview, and production with environment-specific behavior. |
+| [**Variables**](#variables) | Manage runtime configuration and secrets without hard-coding values in your source code. |
+| [**Config as Code**](#config-as-code) | Version deployment behavior and conventions in code-driven project configuration. |
+
+### Environments
+
+Helipod environments help teams isolate risk, validate changes safely, and maintain stable release promotion across stages.
+
+### Variables
+
+Variables allow consistent service configuration while keeping credentials and sensitive tokens out of the repository.
+
+### Config as Code
+
+For teams that prefer reproducible infrastructure workflows, Helipod supports codified deployment patterns and standardized project conventions.
+
+## Builds
+
+| Topic | Description |
+| ----- | ----------- |
+| [**Builds**](#builds) | Understand how Helipod converts source or image references into deployable artifacts. |
+| [**Build Configuration**](#build-configuration) | Override or tune build behavior per service when defaults are not enough. |
+| [**Dockerfiles**](#dockerfiles) | Use Dockerfiles when your workload requires explicit dependency and runtime control. |
+| [**Build Engine**](#build-engine) | Helipod build execution layer for repeatable, production-ready artifacts. |
+
+### Builds
+
+By default, Helipod applies auto-detection and sane build settings to reduce setup time for common stacks.
+
+### Build configuration
+
+Teams can define custom build commands, start commands, or context behavior to match non-standard project structures.
+
+### Dockerfiles
+
+When strict dependency control or custom runtime layers are required, Dockerfiles provide full customization of the build process.
+
+### Build engine
+
+Helipod build infrastructure is optimized for predictable output, reproducibility, and integration with deployment history.
+
+## Deployments
+
+| Topic | Description |
+| ----- | ----------- |
+| [**Deployments**](/build-deploy/deployments) | Understand rollout states, release controls, and deployment operations on Helipod. |
+| [**Git Autodeploys**](#git-autodeploys) | Trigger automatic deployments from connected repository branches. |
+| [**Healthchecks**](#healthchecks) | Validate service readiness before a deployment is treated as healthy. |
+| [**Scaling**](#scaling) | Adjust service capacity horizontally and vertically. |
+| [**Regions**](#regions) | Place workloads closer to users or data dependencies. |
+
+### Deployment lifecycle
+
+Each deployment tracks metadata, logs, status, and timing so teams can inspect what changed and how the rollout behaved.
+
+### Git autodeploys
+
+Connected repositories can trigger deploys automatically on branch updates, enabling a tighter CI/CD loop.
+
+### Healthchecks
+
+Healthchecks reduce bad rollouts by ensuring a service is actually serving before considering deployment successful.
+
+### Scaling
+
+Helipod supports both resource sizing and replica-based scaling patterns to match changing load profiles.
+
+### Regions
+
+Region selection helps reduce latency and align services with data locality or compliance needs.
+
+## Next
+
+- Continue to [Services](/build-deploy/services)
+- Continue to [Environments](/build-deploy/environments)
+- Continue to [Deployments](/build-deploy/deployments)
+- Revisit [The Basics](/the-basics)
+- Explore [Platform](/platform)

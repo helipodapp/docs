@@ -9,7 +9,7 @@ import {
 import Link from 'fumadocs-core/link';
 import Image from 'next/image';
 import Preview from '@/public/banner.png';
-import { Book, ComponentIcon, Pencil, PlusIcon, Server } from 'lucide-react';
+import { Book, ComponentIcon, Layers3, Pencil, PlusIcon, Rocket, Server, Wrench } from 'lucide-react';
 
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (
@@ -30,6 +30,21 @@ export default function Layout({ children }: LayoutProps<'/'>) {
               text: 'Components',
               url: '/ui/components',
               icon: <ComponentIcon />,
+            },
+            {
+              text: 'Platform',
+              url: '/platform',
+              icon: <Layers3 />,
+            },
+            {
+              text: 'Build & Deploy',
+              url: '/build-deploy',
+              icon: <Wrench />,
+            },
+            {
+              text: 'Deployments',
+              url: '/build-deploy/deployments',
+              icon: <Rocket />,
             },
           ],
         },
@@ -72,6 +87,30 @@ export default function Layout({ children }: LayoutProps<'/'>) {
                   <p className="font-medium">OpenAPI</p>
                   <p className="text-fd-muted-foreground text-sm">
                     Generate interactive playgrounds and docs for your OpenAPI schema.
+                  </p>
+                </NavbarMenuLink>
+
+                <NavbarMenuLink href="/platform" className="lg:col-start-2">
+                  <Layers3 className="bg-fd-primary text-fd-primary-foreground p-1 mb-2 rounded-md" />
+                  <p className="font-medium">Platform</p>
+                  <p className="text-fd-muted-foreground text-sm">
+                    Understand Helipod architecture, workflows, and operational principles.
+                  </p>
+                </NavbarMenuLink>
+
+                <NavbarMenuLink href="/build-deploy" className="lg:col-start-3">
+                  <Wrench className="bg-fd-primary text-fd-primary-foreground p-1 mb-2 rounded-md" />
+                  <p className="font-medium">Build &amp; Deploy</p>
+                  <p className="text-fd-muted-foreground text-sm">
+                    Configure services, build pipelines, and rollout behavior in Helipod.
+                  </p>
+                </NavbarMenuLink>
+
+                <NavbarMenuLink href="/build-deploy/deployments" className="lg:col-start-3">
+                  <Rocket className="bg-fd-primary text-fd-primary-foreground p-1 mb-2 rounded-md" />
+                  <p className="font-medium">Deployments</p>
+                  <p className="text-fd-muted-foreground text-sm">
+                    Control release lifecycle, rollout safety, and deployment actions.
                   </p>
                 </NavbarMenuLink>
 

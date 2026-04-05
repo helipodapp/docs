@@ -39,7 +39,7 @@ Use private domain environment variables when available. For example:
 
 - `DATABASE_URL` (private by default)
 - `REDIS_HOST` (private by default)
-- Service reference variables like `${{BackendService.RAILWAY_PRIVATE_DOMAIN}}`
+- Service reference variables like `${{BackendService.PRIVATE_DOMAIN}}`
 
 **Why it matters:**
 
@@ -55,7 +55,7 @@ Instead of hard-coding URLs and credentials, use reference variables to link con
 **Example:**
 
 ```
-BACKEND_URL=${{BackendService.RAILWAY_PUBLIC_DOMAIN}}
+BACKEND_URL=${{BackendService.PUBLIC_DOMAIN}}
 DATABASE_URL=${{PostgresService.DATABASE_URL}}
 ```
 

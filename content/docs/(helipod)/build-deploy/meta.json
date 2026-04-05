@@ -1,0 +1,6 @@
+{
+  "$schema": "../../../../.source/json-schema/docs.meta.json",
+  "title": "Build & Deploy",
+  "description": "Build, configure, and deploy Helipod workloads with predictable release workflows.",
+  "pages": ["services", "environments", "deployments"]
+}

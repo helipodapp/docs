@@ -1,0 +1,119 @@
+---
+title: Deployments
+description: Overview of deployment concepts, release controls, and rollout operations in Helipod.
+icon: Rocket
+---
+
+Helipod keeps deployments simple for day-to-day shipping while still exposing the controls teams need for production reliability.
+
+This page summarizes the core deployment concepts and where to configure them.
+
+## Getting started
+
+| Topic | Description |
+| ----- | ----------- |
+| [**Reference**](#reference) | High-level map of deployment settings and runtime behavior in Helipod. |
+| [**Start Command**](#start-command) | Define how your service boots in runtime environments. |
+| [**Pre-deploy command**](/build-deploy/deployments/pre-deploy-command) | Run setup tasks between build and release cutover. |
+
+### Reference
+
+Deployment behavior in Helipod is controlled through service source, runtime commands, health settings, and release actions. Most teams start with defaults, then refine these controls as systems mature.
+
+### Start Command
+
+Use start command configuration when the default runtime entrypoint is not correct for your service (for example, custom process managers or alternate launch scripts).
+
+## Scaling & performance
+
+| Topic | Description |
+| ----- | ----------- |
+| [**Scaling**](#scaling) | Increase or decrease service capacity using resource sizing and replicas. |
+| [**Regions**](#regions) | Place workloads in regions that match user latency and data locality needs. |
+| [**Performance Optimization**](#performance-optimization) | Improve build-to-live time and runtime responsiveness. |
+| [**Serverless Behavior**](#serverless-behavior) | Configure idle and on-demand patterns for suitable workloads. |
+
+### Scaling
+
+Helipod supports vertical and horizontal scaling. Choose based on workload shape:
+
+- vertical scaling for stronger single-instance capacity,
+- horizontal scaling for throughput and resilience.
+
+### Regions
+
+Regional placement helps reduce end-user latency and can simplify architecture choices when data dependencies are region-sensitive.
+
+### Performance optimization
+
+High-impact optimization patterns include:
+
+- reducing image size,
+- tightening startup path,
+- tuning healthcheck thresholds,
+- separating latency-sensitive workloads from heavy async jobs.
+
+### Serverless behavior
+
+For certain workloads, idle behavior can be tuned to lower cost when traffic is intermittent.
+
+## Health & reliability
+
+| Topic | Description |
+| ----- | ----------- |
+| [**Healthchecks**](#healthchecks) | Verify service readiness and prevent unhealthy releases from serving traffic. |
+| [**Restart Policy**](#restart-policy) | Control restart behavior when a service exits or fails. |
+
+### Healthchecks
+
+Healthchecks provide a safety gate between deployment completion and live serving state. Configure probes that reflect real service readiness.
+
+### Restart policy
+
+Restart policies help standardize failure recovery behavior and reduce manual intervention during transient runtime failures.
+
+## Deployment workflow
+
+| Topic | Description |
+| ----- | ----------- |
+| [**Git Autodeploys**](#git-autodeploys) | Trigger builds and deployments from repository updates. |
+| [**Image Auto Updates**](#image-auto-updates) | Keep image-based services current with controlled update behavior. |
+| [**Staged Changes**](#staged-changes) | Review pending changes before rollout. |
+| [**Deployment Actions**](#deployment-actions) | Perform operational actions across deployment lifecycle states. |
+| [**Deployment Teardown**](#deployment-teardown) | Understand cleanup behavior when deployments are replaced or removed. |
+
+### Git autodeploys
+
+Repository-linked services can deploy automatically on selected branch updates to keep delivery loops fast.
+
+### Image auto updates
+
+For image sources, Helipod can stage new versions and apply them with approval or maintenance-window strategy.
+
+### Staged changes
+
+Staged changes let teams inspect exactly what will be deployed before applying release actions, improving confidence and auditability.
+
+### Deployment actions
+
+Deployment actions include common operational controls such as redeploy, rollback strategy execution, and lifecycle transitions.
+
+### Deployment teardown
+
+When a deployment is replaced, Helipod handles teardown according to service lifecycle rules so active traffic can move safely to the healthy target.
+
+## Advanced
+
+| Topic | Description |
+| ----- | ----------- |
+| [**Monorepo Strategies**](#monorepo-strategies) | Deploy only the services affected by repository-level changes. |
+
+### Monorepo strategies
+
+For monorepos, define clear service boundaries and watch paths to avoid unnecessary rebuilds and reduce deploy noise across unrelated services.
+
+## Next
+
+- Read [Pre-deploy command](/build-deploy/deployments/pre-deploy-command)
+- Continue to [Services](/build-deploy/services)
+- Return to [Build & Deploy](/build-deploy)

@@ -1,0 +1,91 @@
+---
+title: Use Cases
+description: Explore practical deployment and operations use cases where Helipod delivers the most value.
+icon: Briefcase
+---
+
+Helipod is designed for teams that want fast delivery loops with production-grade controls as their systems grow.
+
+This page explains where Helipod is typically a strong fit today, how teams scale on the platform, and where external tooling is often recommended.
+
+## Is Helipod production ready?
+
+Yes, many teams run production workloads on Helipod across different stages and industries.
+
+Common verticals include:
+
+- SaaS products
+- E-commerce workloads
+- Education platforms
+- Developer tooling
+- Agencies and client-delivery stacks
+- AI-enabled applications
+
+Production readiness always depends on your own reliability requirements, compliance obligations, and incident response model. Helipod gives you strong defaults and operational controls, while still allowing integrations when your requirements exceed default platform capabilities.
+
+## Scale on Helipod
+
+Helipod supports services ranging from small projects to high-growth production workloads.
+
+As traffic and compute demand increase, teams generally combine three strategies:
+
+- Vertical and horizontal scaling at the service level
+- Architecture tuning (queues, caching, database indexing, workload partitioning)
+- Operational guardrails (monitoring, runbooks, staged rollouts)
+
+If your growth curve requires custom capacity planning, Helipod support can help you evaluate limits, rollout patterns, and migration-safe architecture decisions.
+
+## Databases and stateful workloads
+
+Helipod supports stateful workloads, but your database strategy should match your risk profile.
+
+For velocity-focused teams, managed defaults can be enough in early stages. For mission-critical workloads, we strongly recommend a hardened data posture:
+
+- Regular automated backups
+- Tested restore runbooks
+- Replica or secondary strategy for disaster scenarios
+- Clear RPO/RTO targets in your operations policy
+
+## Observability and incident diagnosis
+
+Helipod provides the core signals teams need for day-to-day operations:
+
+- Build and deploy logs
+- Runtime logs
+- Service-level usage metrics
+
+For longer retention, advanced tracing, and org-wide incident analytics, many teams pair Helipod with external observability platforms.
+
+## Networking and traffic control
+
+Helipod supports both public ingress and private service-to-service communication.
+
+For internet-facing workloads with strict controls, teams commonly add:
+
+- Cloud edge and WAF protection
+- Custom rate limiting
+- Dedicated traffic filtering policies
+
+Inside Helipod projects, private networking is typically the preferred pattern for internal service communication.
+
+## Workloads that may need extra planning
+
+Some use cases require deeper validation before adopting any single platform end-to-end:
+
+- Highly regulated sectors with strict certification boundaries
+- Ultra-high-compute or specialized accelerator workloads
+- Hard real-time systems with strict latency contracts
+
+In these cases, Helipod can still be part of the architecture, but teams often run a hybrid model and place specific components on specialized infrastructure.
+
+## Recommendations
+
+If you are evaluating Helipod for a production or migration path:
+
+- Start with one representative service
+- Define reliability and rollback criteria up front
+- Validate backup and restore before go-live
+- Add observability and alerting early
+- Review support and escalation model with your team
+
+For support channels and response expectations, continue to [Support](/platform/support).

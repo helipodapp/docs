@@ -1,0 +1,49 @@
+---
+title: Add a Pre-deploy Command
+description: Execute setup tasks between build completion and rollout on Helipod.
+icon: Terminal
+---
+
+Pre-deploy commands run after your image is built and before a new release is switched into service.
+
+They are commonly used for tasks like schema migrations, seed preparation, or one-time checks that must pass before the deployment proceeds.
+
+Pre-deploy execution runs inside Helipod's private service context and can read the same environment variables configured for the target environment.
+
+If the command exits with failure, Helipod stops the deployment flow and does not auto-retry that pre-deploy step.
+
+## Operational expectations
+
+To keep pre-deploy behavior reliable:
+
+- Exit with status code `0` on success and non-zero on failure.
+- Keep execution duration bounded so build/deploy capacity is not blocked unnecessarily.
+- Avoid assumptions that the new application instance is already running.
+- Ensure required binaries and dependencies exist in the built image.
+- Do not rely on local filesystem persistence for state handoff.
+
+<Banner variant="warning">
+Pre-deploy commands run in an isolated execution container. Filesystem changes from this step are not persisted to your running service instance, and persistent volume mounts are not part of this execution path.
+</Banner>
+
+## Typical use cases
+
+- Applying safe, idempotent database migrations
+- Verifying critical config or connectivity before rollout
+- Preparing metadata needed by the next runtime phase
+
+## Example pattern
+
+Use pre-deploy commands for guardrails, and keep long-lived data mutations explicit and observable:
+
+```bash
+pnpm db:migrate && pnpm db:verify
+```
+
+If this command fails, the release should fail fast rather than progressing to runtime.
+
+## Next
+
+- Back to [Deployments](/build-deploy/deployments)
+- Continue to [Environments](/build-deploy/environments)
+- Review [Support](/platform/support)

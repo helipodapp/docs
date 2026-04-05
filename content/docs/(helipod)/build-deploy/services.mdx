@@ -1,0 +1,155 @@
+---
+title: Services
+description: Understand service types, service sources, and operational controls in Helipod projects.
+icon: Boxes
+---
+
+A Helipod service is the primary deployment target in your project.
+
+Under the hood, each service runs as a containerized workload with its own deployment history, runtime metrics, configuration, and release controls.
+
+## What a service contains
+
+Each service keeps operational state such as:
+
+- Source reference (repository, container image, or local CLI deployment)
+- Build and start behavior
+- Runtime variables and secrets
+- Deployment attempts and status history
+- Logs and performance metrics
+
+Changes to service configuration are typically staged and then applied through a deployment action so teams can review rollout impact.
+
+## Service types
+
+### Persistent services
+
+Always-on workloads for APIs, web apps, workers, queues, and similar long-running processes.
+
+### Scheduled jobs
+
+Task-based workloads that run on schedule and exit after completion.
+
+## Creating a service
+
+From the project canvas:
+
+1. Open your project.
+2. Click **New** (or the equivalent create action).
+3. Choose a source type.
+4. Confirm service settings and deploy.
+
+Helipod supports service creation from:
+
+- Git repositories
+- Docker/container images
+- Local directory deployment through CLI flow
+- Empty service scaffolding for staged setup
+
+## Accessing service settings
+
+Open a service tile in the canvas and move to the **Settings** tab to configure source, runtime commands, variables, scaling, and deployment behavior.
+
+## Service source options
+
+You can attach one of the following source modes:
+
+- Repository source (Git provider)
+- Container image source
+- Local source via CLI upload/deploy flow
+
+If a Dockerfile is present in repository mode, Helipod can use it as the build contract.
+
+## Deploying from a Git repository
+
+Connect a repository and select branch/source settings for the service.
+
+When autodeploy is enabled, new commits can trigger build and deployment automatically according to your environment and deployment rules.
+
+## Deploying public container images
+
+Helipod supports standard public registry paths. Example formats:
+
+- `bitnami/redis`
+- `ghcr.io/org/repository:tag`
+- `registry.gitlab.com/group/project:tag`
+- `mcr.microsoft.com/dotnet/aspire-dashboard`
+- `quay.io/organization/repository:tag`
+
+## Private container images
+
+Private registry deployments require valid registry credentials configured in the service source settings.
+
+For sensitive workloads, keep credentials in service variables and rotate access tokens periodically.
+
+## Updating image-based services
+
+For image-based services, Helipod can detect new image versions and stage updates.
+
+Teams may use:
+
+- Manual update approval
+- Scheduled update windows
+- Controlled maintenance windows for safer production updates
+
+Because image updates trigger redeployments, plan updates to avoid user-facing disruption.
+
+## Deploying from a local directory
+
+Typical CLI-based flow:
+
+1. Create an empty service target.
+2. Move into your local project directory.
+3. Link local context to the Helipod project.
+4. Deploy to the selected service target.
+
+This path is useful for quick tests, migrations, or workflows where repository integration is not yet configured.
+
+## Monorepo considerations
+
+In monorepos, define clear service root paths and build contexts to avoid cross-service dependency confusion.
+
+## Ephemeral and persistent storage
+
+Services have ephemeral runtime storage by default. If data must survive redeployments, attach persistent volumes.
+
+Use persistent volumes for:
+
+- User-generated files
+- Stateful service data
+- Cache/data that must survive restart cycles
+
+## Monitoring and diagnostics
+
+Service-level observability includes:
+
+- Build logs
+- Deploy logs
+- Runtime logs
+- Resource metrics
+
+These signals should be reviewed together when diagnosing rollout regressions.
+
+## Deployment approvals
+
+Teams can enforce approval gates before selected deployments are applied, especially for protected branches or production environments.
+
+This is useful when your process requires release review, change ownership checks, or compliance traceability.
+
+## Templates and repeatable stacks
+
+Templates package common service combinations so teams can launch known-good architecture patterns faster.
+
+## Constraints and naming
+
+Use short, descriptive service names and consistent naming conventions to keep project canvases readable as your service count grows.
+
+## Deleting a service
+
+Delete services from project settings or service controls after confirming there are no active dependencies (domains, volumes, or downstream service references).
+
+## Next
+
+- Back to [Build & Deploy](/build-deploy)
+- Read [Best Practices](/best-practices)
+- Continue to [Support](/platform/support)

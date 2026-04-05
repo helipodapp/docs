@@ -1,0 +1,6 @@
+{
+  "$schema": "../../../../.source/json-schema/docs.meta.json",
+  "title": "Platform",
+  "description": "Understand the Helipod platform from deployment workflows to operational principles.",
+  "pages": ["use-cases", "support", "incident-management", "philosophy"]
+}

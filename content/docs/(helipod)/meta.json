@@ -9,6 +9,8 @@
     "the-basics",
     "best-practices",
     "advanced-usage",
-    "production-readiness"
+    "production-readiness",
+    "platform",
+    "build-deploy"
   ]
 }
