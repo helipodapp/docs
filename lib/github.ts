@@ -13,6 +13,10 @@ export const DocsCategory = 'Docs Feedback';
 
 let instance: Octokit | undefined;
 
+function isGithubFeedbackConfigured(): boolean {
+  return Boolean(process.env.GITHUB_APP_ID && process.env.GITHUB_APP_PRIVATE_KEY);
+}
+
 async function getOctokit(): Promise<Octokit> {
   if (instance) return instance;
   const appId = process.env.GITHUB_APP_ID;
@@ -75,19 +79,39 @@ async function getFeedbackDestination() {
 export async function onPageFeedbackAction(feedback: PageFeedback): Promise<ActionResponse> {
   'use server';
   feedback = pageFeedback.parse(feedback);
-  return createDiscussionThread(
-    feedback.url,
-    `[${feedback.opinion}] ${feedback.message}\n\n> Forwarded from user feedback.`,
-  );
+  if (!isGithubFeedbackConfigured()) {
+    console.warn('[feedback] GitHub App env is missing, skipping discussion creation.');
+    return {};
+  }
+
+  try {
+    return await createDiscussionThread(
+      feedback.url,
+      `[${feedback.opinion}] ${feedback.message}\n\n> Forwarded from user feedback.`,
+    );
+  } catch (error) {
+    console.error('[feedback] Failed to create GitHub discussion (page feedback):', error);
+    return {};
+  }
 }
 
 export async function onBlockFeedbackAction(feedback: BlockFeedback): Promise<ActionResponse> {
   'use server';
   feedback = blockFeedback.parse(feedback);
-  return createDiscussionThread(
-    feedback.url,
-    `> ${feedback.blockBody ?? feedback.blockId}\n\n${feedback.message}\n\n> Forwarded from user feedback.`,
-  );
+  if (!isGithubFeedbackConfigured()) {
+    console.warn('[feedback] GitHub App env is missing, skipping discussion creation.');
+    return {};
+  }
+
+  try {
+    return await createDiscussionThread(
+      feedback.url,
+      `> ${feedback.blockBody ?? feedback.blockId}\n\n${feedback.message}\n\n> Forwarded from user feedback.`,
+    );
+  } catch (error) {
+    console.error('[feedback] Failed to create GitHub discussion (block feedback):', error);
+    return {};
+  }
 }
 
 async function createDiscussionThread(pageId: string, body: string) {

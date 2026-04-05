@@ -19,7 +19,7 @@ import {
   ImageZoom,
   InlineTOC,
 } from '@/components/preview/lazy';
-import BannerImage from '@/public/banner.png';
+import BannerImage from '@/public/banner.webp';
 
 export function heading(): ReactNode {
   return (

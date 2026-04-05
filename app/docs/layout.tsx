@@ -6,7 +6,6 @@ import { getSection } from '@/lib/source/navigation';
 import { MessageCircleIcon } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { buttonVariants } from 'fumadocs-ui/components/ui/button';
-import { HelipodLogo } from '@/components/logo';
 import 'katex/dist/katex.min.css';
 
 export default function Layout({ children }: LayoutProps<'/docs'>) {

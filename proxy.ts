@@ -20,7 +20,8 @@ const passthroughPrefixes = [
   '/sitemap.xml',
   '/favicon.ico',
   '/icon.png',
-  '/banner.png',
+  '/banner.webp',
+  '/assets',
 ];
 
 function isPassthrough(pathname: string) {

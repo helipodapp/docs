@@ -1,9 +1,8 @@
 import { AlbumIcon, Heart, LayoutTemplate } from 'lucide-react';
 import Image from 'next/image';
 import type { BaseLayoutProps, LinkItemType } from 'fumadocs-ui/layouts/shared';
-import { FumadocsIcon } from '@/app/layout.client';
-import Logo from '@/public/logo.png';
-import { HelipodLogo } from '../logo';
+import { HelipodLogo } from '@/components/logo';
+import Logo from '@/public/logo.webp';
 
 export const linkItems: LinkItemType[] = [
   {
@@ -39,16 +38,15 @@ export const linkItems: LinkItemType[] = [
 
 export const logo = (
   <>
-    {/* <Image
+    <Image
       alt="Fumadocs"
       src={Logo}
       sizes="100px"
       className="hidden w-22 in-[.uwu]:block"
       aria-label="Fumadocs"
-    /> */}
-    <HelipodLogo size={22} />
-
-    {/* <FumadocsIcon className="size-5 in-[.uwu]:hidden" /> */}
+    />
+    
+    <HelipodLogo className="size-5 in-[.uwu]:hidden" />
   </>
 );
 

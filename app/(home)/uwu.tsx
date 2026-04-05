@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { cn } from '@/lib/cn';
 import { buttonVariants } from '@/components/ui/button';
-import Logo from '@/public/logo.png';
+import Logo from '@/public/logo.webp';
 
 export function UwuHero() {
   return (
@@ -22,7 +22,7 @@ export function UwuHero() {
           Getting Started
         </Link>
         <a
-          href="https://stackblitz.com/~/github.com/fuma-nama/fumadocs-ui-template"
+          href="https://helipod.id"
           className={cn(
             buttonVariants({
               size: 'lg',
@@ -31,7 +31,7 @@ export function UwuHero() {
             }),
           )}
         >
-          Open Demo
+          Open Helipod
         </a>
       </div>
     </div>

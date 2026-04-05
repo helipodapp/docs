@@ -130,19 +130,21 @@ export function Feedback({
           <div className="px-3 py-6 flex flex-col items-center gap-3 bg-fd-card text-fd-muted-foreground text-sm text-center rounded-xl">
             <p>Thank you for your feedback!</p>
             <div className="flex flex-row items-center gap-2">
-              <a
-                href={previous.response?.githubUrl}
-                rel="noreferrer noopener"
-                target="_blank"
-                className={cn(
-                  buttonVariants({
-                    color: 'primary',
-                  }),
-                  'text-xs',
-                )}
-              >
-                View on GitHub
-              </a>
+              {previous.response?.githubUrl ? (
+                <a
+                  href={previous.response.githubUrl}
+                  rel="noreferrer noopener"
+                  target="_blank"
+                  className={cn(
+                    buttonVariants({
+                      color: 'primary',
+                    }),
+                    'text-xs',
+                  )}
+                >
+                  View on GitHub
+                </a>
+              ) : null}
 
               <button
                 className={cn(
@@ -270,19 +272,21 @@ export function FeedbackBlock({
           <div className="flex flex-col items-center py-2 gap-2 text-fd-muted-foreground text-sm text-center rounded-xl">
             <p>Thank you for your feedback!</p>
             <div className="flex flex-row items-center gap-2">
-              <a
-                href={previous.response?.githubUrl}
-                rel="noreferrer noopener"
-                target="_blank"
-                className={cn(
-                  buttonVariants({
-                    color: 'primary',
-                  }),
-                  'text-xs',
-                )}
-              >
-                View on GitHub
-              </a>
+              {previous.response?.githubUrl ? (
+                <a
+                  href={previous.response.githubUrl}
+                  rel="noreferrer noopener"
+                  target="_blank"
+                  className={cn(
+                    buttonVariants({
+                      color: 'primary',
+                    }),
+                    'text-xs',
+                  )}
+                >
+                  View on GitHub
+                </a>
+              ) : null}
 
               <button
                 className={cn(

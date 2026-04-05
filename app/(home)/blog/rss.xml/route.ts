@@ -13,7 +13,7 @@ export function GET() {
     link: `${baseUrl}/blog`,
     language: 'en',
 
-    image: `${baseUrl}/banner.png`,
+    image: `${baseUrl}/banner.webp`,
     favicon: `${baseUrl}/icon.png`,
     copyright: 'All rights reserved 2025, Fuma Nama',
   });

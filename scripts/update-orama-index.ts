@@ -11,10 +11,23 @@ export async function updateSearchIndexes(): Promise<void> {
   const content = await fs.readFile('.next/server/app/static.json.body');
   const records = JSON.parse(content.toString()) as OramaDocument[];
 
-  await sync(orama, {
-    index: DataSourceId,
-    documents: records,
-  });
+  try {
+    await sync(orama, {
+      index: DataSourceId,
+      documents: records,
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+
+    // Orama free tier can reject large syncs with HTTP 402 document limits.
+    // Search indexing is optional and should not break the production build.
+    if (message.includes('status 402') || message.includes('Document limit exceeded')) {
+      console.warn(`[orama] skipped index sync: ${message}`);
+      return;
+    }
+
+    throw error;
+  }
 
   console.log(`search updated: ${records.length} records`);
 }

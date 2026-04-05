@@ -14,7 +14,7 @@ export const metadata = createMetadata({
     template: '%s | Helipod',
     default: 'Helipod',
   },
-  description: 'The React.js documentation framework.',
+  description: 'Official Helipod documentation with guides, tutorials, and API references for building and deploying applications.',
   metadataBase: baseUrl,
 });
 

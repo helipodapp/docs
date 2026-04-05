@@ -21,7 +21,11 @@ export async function fetchContributors(
   );
 
   if (!response.ok) {
-    throw new Error(`Failed to fetch contributors: ${response.statusText}`);
+    // Contributor data is decorative; don't fail the build/page render if unavailable.
+    console.warn(
+      `[contributors] Failed to fetch contributors for ${repoOwner}/${repoName}: ${response.status} ${response.statusText}`,
+    );
+    return [];
   }
 
   const contributors = (await response.json()) as Contributor[];

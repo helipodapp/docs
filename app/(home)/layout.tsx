@@ -8,7 +8,7 @@ import {
 } from 'fumadocs-ui/layouts/home/navbar';
 import Link from 'fumadocs-core/link';
 import Image from 'next/image';
-import Preview from '@/public/banner.png';
+import Preview from '@/public/banner.webp';
 import { Book, ComponentIcon, Layers3, Pencil, PlusIcon, Rocket, Server, Wrench } from 'lucide-react';
 
 export default function Layout({ children }: LayoutProps<'/'>) {
