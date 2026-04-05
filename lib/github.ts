@@ -12,6 +12,7 @@ export const owner = 'helipodapp';
 export const DocsCategory = 'Docs Feedback';
 
 let instance: Octokit | undefined;
+let feedbackDisabledReason: string | undefined;
 
 function isGithubFeedbackConfigured(): boolean {
   return Boolean(process.env.GITHUB_APP_ID && process.env.GITHUB_APP_PRIVATE_KEY);
@@ -23,7 +24,8 @@ async function getOctokit(): Promise<Octokit> {
   const privateKey = process.env.GITHUB_APP_PRIVATE_KEY;
 
   if (!appId || !privateKey) {
-    throw new Error('No GitHub keys provided for Github app, docs feedback feature will not work.');
+    feedbackDisabledReason = 'missing GitHub App credentials';
+    return undefined as never;
   }
 
   const app = new App({
@@ -31,16 +33,24 @@ async function getOctokit(): Promise<Octokit> {
     privateKey,
   });
 
-  const { data } = await app.octokit.request('GET /repos/{owner}/{repo}/installation', {
-    owner,
-    repo,
-    headers: {
-      'X-GitHub-Api-Version': '2022-11-28',
-    },
-  });
+  try {
+    const { data } = await app.octokit.request('GET /repos/{owner}/{repo}/installation', {
+      owner,
+      repo,
+      headers: {
+        'X-GitHub-Api-Version': '2022-11-28',
+      },
+    });
 
-  instance = await app.getInstallationOctokit(data.id);
-  return instance;
+    instance = await app.getInstallationOctokit(data.id);
+    feedbackDisabledReason = undefined;
+    return instance;
+  } catch (error) {
+    feedbackDisabledReason =
+      'GitHub App is not installed on helipodapp/docs or cannot access the repository';
+    console.warn('[feedback] GitHub discussion integration disabled:', feedbackDisabledReason);
+    return undefined as never;
+  }
 }
 
 interface RepositoryInfo {
@@ -57,6 +67,7 @@ let cachedDestination: RepositoryInfo | undefined;
 async function getFeedbackDestination() {
   if (cachedDestination) return cachedDestination;
   const octokit = await getOctokit();
+  if (!octokit) return undefined;
 
   const {
     repository,
@@ -116,12 +127,19 @@ export async function onBlockFeedbackAction(feedback: BlockFeedback): Promise<Ac
 
 async function createDiscussionThread(pageId: string, body: string) {
   const octokit = await getOctokit();
+  if (!octokit) return {};
+
   const destination = await getFeedbackDestination();
+  if (!destination) return {};
   const category = destination.discussionCategories.nodes.find(
     (category) => category.name === DocsCategory,
   );
 
-  if (!category) throw new Error(`Please create a "${DocsCategory}" category in GitHub Discussion`);
+  if (!category) {
+    throw new Error(
+      `Please create a "${DocsCategory}" category in GitHub Discussion. Current issue: ${feedbackDisabledReason ?? 'category not found'}`,
+    );
+  }
 
   const title = `Feedback for ${pageId}`;
   const {
@@ -158,7 +176,9 @@ async function createDiscussionThread(pageId: string, body: string) {
     };
   } else {
     const result: {
-      discussion: { id: string; url: string };
+      createDiscussion: {
+        discussion: { id: string; url: string };
+      };
     } = await octokit.graphql(`
             mutation {
               createDiscussion(input: { repositoryId: "${destination.id}", categoryId: "${category.id}", body: ${JSON.stringify(body)}, title: ${JSON.stringify(title)} }) {
@@ -167,7 +187,7 @@ async function createDiscussionThread(pageId: string, body: string) {
             }`);
 
     return {
-      githubUrl: result.discussion.url,
+      githubUrl: result.createDiscussion.discussion.url,
     };
   }
 }
