@@ -7,8 +7,8 @@ import {
   type PageFeedback,
 } from '@/components/feedback/schema';
 
-export const repo = 'fumadocs';
-export const owner = 'fuma-nama';
+export const repo = 'docs';
+export const owner = 'helipodapp';
 export const DocsCategory = 'Docs Feedback';
 
 let instance: Octokit | undefined;
