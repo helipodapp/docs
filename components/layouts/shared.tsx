@@ -39,11 +39,11 @@ export const linkItems: LinkItemType[] = [
 export const logo = (
   <>
     <Image
-      alt="Fumadocs"
+      alt="Helipod logo"
       src={Logo}
       sizes="100px"
       className="hidden w-22 in-[.uwu]:block"
-      aria-label="Fumadocs"
+      aria-label="Helipod logo"
     />
     
     <HelipodLogo className="size-5 in-[.uwu]:hidden" />

@@ -59,9 +59,9 @@ export default async function Page() {
         height="536"
         className="absolute top-16 z-[-1] w-full max-w-[1200px] opacity-0 dark:opacity-20"
       />
-      <h1 className="text-4xl font-semibold">Support Fumadocs</h1>
+      <h1 className="text-4xl font-semibold">Support Helipod</h1>
       <p className="mt-4 text-sm">
-        Support the development work of Fumadocs. Fumadocs is fully open source, your sponsorship
+        Support the development work of Helipod. Helipod is fully open source, your sponsorship
         means a lot.
       </p>
       <a

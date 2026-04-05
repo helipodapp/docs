@@ -8,7 +8,7 @@ const baseUrl = 'https://fumadocs.dev';
 
 export function GET() {
   const feed = new Feed({
-    title: 'Fumadocs Blog',
+    title: 'Helipod Blog',
     id: `${baseUrl}/blog`,
     link: `${baseUrl}/blog`,
     language: 'en',
