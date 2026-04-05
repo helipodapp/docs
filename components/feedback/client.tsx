@@ -49,9 +49,9 @@ const blockFeedbackResult = z.extend(blockFeedback, {
  * A feedback component to be attached at the end of page
  */
 export function Feedback({
-  onSendAction,
+  endpoint,
 }: {
-  onSendAction: (feedback: PageFeedback) => Promise<ActionResponse>;
+  endpoint: string;
 }) {
   const url = usePathname();
   const { previous, setPrevious } = useSubmissionStorage(url, (v) => {
@@ -72,7 +72,7 @@ export function Feedback({
         message,
       };
 
-      const response = await onSendAction(feedback);
+      const response = await sendFeedback(endpoint, feedback);
       setPrevious({
         response,
         ...feedback,
@@ -199,10 +199,10 @@ export function Feedback({
 export function FeedbackBlock({
   id,
   body,
-  onSendAction,
+  endpoint,
   children,
 }: FeedbackBlockProps & {
-  onSendAction: (feedback: BlockFeedback) => Promise<ActionResponse>;
+  endpoint: string;
   children: ReactNode;
 }) {
   const url = usePathname();
@@ -225,7 +225,7 @@ export function FeedbackBlock({
         message,
       };
 
-      const response = await onSendAction(feedback);
+      const response = await sendFeedback(endpoint, feedback);
       setPrevious({
         response,
         ...feedback,
@@ -250,7 +250,7 @@ export function FeedbackBlock({
         <PopoverTrigger
           className={cn(
             buttonVariants({ variant: 'secondary', size: 'sm' }),
-            'absolute -top-7 end-0 backdrop-blur-sm text-fd-muted-foreground gap-1.5 transition-all duration-100 data-[state=open]:bg-fd-accent data-[state=open]:text-fd-accent-foreground',
+            'absolute -top-7 inset-e-0 backdrop-blur-sm text-fd-muted-foreground gap-1.5 transition-all duration-100 data-[state=open]:bg-fd-accent data-[state=open]:text-fd-accent-foreground',
             !open &&
               'opacity-0 pointer-events-none group-hover/feedback:pointer-events-auto group-hover/feedback:opacity-100 group-hover/feedback:delay-100 hover:pointer-events-auto hover:opacity-100 hover:delay-100',
           )}
@@ -267,7 +267,7 @@ export function FeedbackBlock({
         <div className="in-[.prose-no-margin]:prose-no-margin">{children}</div>
       </div>
 
-      <PopoverContent className="min-w-[300px] bg-fd-card text-fd-card-foreground">
+      <PopoverContent className="min-w-75 bg-fd-card text-fd-card-foreground">
         {previous ? (
           <div className="flex flex-col items-center py-2 gap-2 text-fd-muted-foreground text-sm text-center rounded-xl">
             <p>Thank you for your feedback!</p>
@@ -331,6 +331,22 @@ export function FeedbackBlock({
       </PopoverContent>
     </Popover>
   );
+}
+
+async function sendFeedback(endpoint: string, feedback: PageFeedback | BlockFeedback) {
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(feedback),
+  });
+
+  if (!response.ok) {
+    return {};
+  }
+
+  return actionResponse.parse(await response.json());
 }
 
 function useSubmissionStorage<Result>(blockId: string, validate: (v: unknown) => Result | null) {

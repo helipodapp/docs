@@ -9,7 +9,7 @@ import { source } from '@/lib/source';
 import { Wrapper } from '@/components/preview/wrapper';
 import { Mermaid } from '@/components/mdx/mermaid';
 import { Feedback, FeedbackBlock } from '@/components/feedback/client';
-import { onBlockFeedbackAction, onPageFeedbackAction, owner, repo } from '@/lib/github';
+import { owner, repo } from '@/lib/github';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import Link from 'fumadocs-core/link';
 import { findSiblings } from 'fumadocs-core/page-tree';
@@ -110,7 +110,7 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
               );
             },
             FeedbackBlock: ({ children, ...props }) => (
-              <FeedbackBlock {...props} onSendAction={onBlockFeedbackAction}>
+              <FeedbackBlock {...props} endpoint="/api/feedback">
                 {children}
               </FeedbackBlock>
             ),
@@ -128,7 +128,7 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
         />
         {page.data.index ? <DocsCategory url={page.url} /> : null}
       </div>
-      <Feedback onSendAction={onPageFeedbackAction} />
+      <Feedback endpoint="/api/feedback" />
       {lastModified && <PageLastUpdate date={lastModified} />}
     </DocsPage>
   );

@@ -87,8 +87,7 @@ async function getFeedbackDestination() {
   return (cachedDestination = repository);
 }
 
-export async function onPageFeedbackAction(feedback: PageFeedback): Promise<ActionResponse> {
-  'use server';
+export async function submitPageFeedback(feedback: PageFeedback): Promise<ActionResponse> {
   feedback = pageFeedback.parse(feedback);
   if (!isGithubFeedbackConfigured()) {
     console.warn('[feedback] GitHub App env is missing, skipping discussion creation.');
@@ -106,8 +105,7 @@ export async function onPageFeedbackAction(feedback: PageFeedback): Promise<Acti
   }
 }
 
-export async function onBlockFeedbackAction(feedback: BlockFeedback): Promise<ActionResponse> {
-  'use server';
+export async function submitBlockFeedback(feedback: BlockFeedback): Promise<ActionResponse> {
   feedback = blockFeedback.parse(feedback);
   if (!isGithubFeedbackConfigured()) {
     console.warn('[feedback] GitHub App env is missing, skipping discussion creation.');
