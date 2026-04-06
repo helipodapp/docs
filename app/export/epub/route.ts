@@ -9,7 +9,7 @@ const epubSource = loader(docs.toFumadocsSource(), {
 });
 
 type EpubPageData = {
-  getText?: (kind: 'raw') => string;
+  getText?: (kind: 'raw') => Promise<string>;
 };
 
 export async function GET(): Promise<Response> {
