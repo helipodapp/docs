@@ -67,6 +67,70 @@ function formatTimestamp(value?: string | Date): string {
   });
 }
 
+function linkifySourceValue(value: string): string {
+  const trimmed = value.trim();
+  if (!trimmed) return trimmed;
+
+  // Keep existing markdown links untouched.
+  if (/^\[[^\]]+\]\([^\)]+\)$/.test(trimmed)) return trimmed;
+
+  // Convert bracket-only path format like [/best-practices] into a real markdown link.
+  const bracketOnly = trimmed.match(/^\[([^\]]+)\]$/);
+  if (bracketOnly) {
+    const inner = bracketOnly[1].trim();
+    if (/^\/[\w\-./#?=&%]+$/.test(inner) || /^https?:\/\/\S+$/i.test(inner)) {
+      return `[${inner}](${inner})`;
+    }
+  }
+
+  const normalized = trimmed.replace(/[),.;:!?]+$/, '');
+  const isPath = /^\/[\w\-./#?=&%]+$/.test(normalized);
+  const isUrl = /^https?:\/\/\S+$/i.test(normalized);
+
+  if (!isPath && !isUrl) return trimmed;
+
+  return `[${normalized}](${normalized})`;
+}
+
+function normalizeAssistantSources(text: string): string {
+  const lines = text.split('\n');
+  let inSourcesSection = false;
+
+  return lines
+    .map((line) => {
+      const sourcesHeader = line.match(/^\s*sources\s*:\s*(.*)$/i);
+      if (sourcesHeader) {
+        inSourcesSection = true;
+        const rest = sourcesHeader[1].trim();
+        if (!rest) return 'Sources:';
+
+        const parts = rest.split(',').map((part) => linkifySourceValue(part.trim()));
+        return `Sources: ${parts.join(', ')}`;
+      }
+
+      if (!inSourcesSection) return line;
+
+      if (!line.trim()) {
+        inSourcesSection = false;
+        return line;
+      }
+
+      // Stop rewriting once another heading starts.
+      if (/^\s*#{1,6}\s+/.test(line)) {
+        inSourcesSection = false;
+        return line;
+      }
+
+      const bulletMatch = line.match(/^(\s*[-*]\s+)(.+)$/);
+      if (bulletMatch) {
+        return `${bulletMatch[1]}${linkifySourceValue(bulletMatch[2])}`;
+      }
+
+      return linkifySourceValue(line);
+    })
+    .join('\n');
+}
+
 export function Chat<TMessage extends ChatMessage>({
   className,
   messages,
@@ -135,6 +199,7 @@ export function Chat<TMessage extends ChatMessage>({
             .filter((message) => message.role !== 'system')
             .map((message) => {
               const text = textFromMessage(message);
+              const assistantText = message.role === 'assistant' ? normalizeAssistantSources(text) : text;
               const isUser = message.role === 'user';
               const roleLabel = isUser ? 'You' : 'Assistant';
               const timeLabel = formatTimestamp(message.createdAt);
@@ -163,7 +228,7 @@ export function Chat<TMessage extends ChatMessage>({
                         <p className="whitespace-pre-wrap text-sm leading-6">{text || '...'}</p>
                       ) : (
                         <div className="max-w-none text-sm leading-6 [&_p]:text-sm [&_li]:text-sm [&_code]:text-[13px] [&_pre]:my-2 [&_pre]:text-[13px] [&_pre]:leading-6 [&_code]:before:content-none [&_code]:after:content-none">
-                          <Markdown text={text || '...'} />
+                          <Markdown text={assistantText || '...'} />
                         </div>
                       )}
                     </div>

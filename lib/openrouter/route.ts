@@ -31,6 +31,8 @@ async function createSearchServer() {
     },
   });
 
+  const seen = new Set<string>();
+
   const docs = await chunkedAll(
     source.getPages().map(async (page) => {
       const data = page.data as {
@@ -40,6 +42,10 @@ async function createSearchServer() {
       };
 
       if (typeof data.getText !== 'function') return null;
+
+      const sourceKey = (page.url || data.title || '').trim().toLowerCase();
+      if (seen.has(sourceKey)) return null;
+      seen.add(sourceKey);
 
       return {
         title: data.title ?? page.url,
@@ -80,6 +86,8 @@ const systemPrompt = [
   'If the user sends a short greeting or very short message, reply naturally and briefly in the same language. Do not over-explain.',
   'Use the `search` tool to retrieve relevant docs context before answering when needed.',
   'The `search` tool returns raw JSON results from documentation. Use those results to ground your answer and cite sources as markdown links using the document `url` field when available.',
+  'Do not use labels like [S1] or [S3]. If you cite a source inline, use a markdown link to the docs page, for example [The Basics](/the-basics).',
+  'End every answer with a Sources section containing each docs page only once, using markdown links.',
   'If you cannot find the answer in search results, say you do not know and suggest a better search query.',
 ].join('\n');
 

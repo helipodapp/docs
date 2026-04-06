@@ -1,5 +1,6 @@
 'use client';
 import {
+  useCallback,
   type ComponentProps,
   createContext,
   type FormEvent,
@@ -29,6 +30,7 @@ const Context = createContext<{
   open: boolean;
   setOpen: (open: boolean) => void;
   chat: UseChatHelpers<DocsChatUIMessage>;
+  clearHistory: () => void;
 } | null>(null);
 
 type ChatProps = {
@@ -36,6 +38,30 @@ type ChatProps = {
 };
 
 const CHAT_HISTORY_LIMIT = 20;
+
+function textFromParts(message: DocsChatUIMessage): string {
+  const parts = message.parts as Array<{ type?: string; text?: string }> | undefined;
+  if (!Array.isArray(parts)) return '';
+
+  return parts
+    .filter((part) => part.type === 'text' && typeof part.text === 'string')
+    .map((part) => part.text as string)
+    .join('\n');
+}
+
+function areMessagesEquivalent(a: DocsChatUIMessage[], b: DocsChatUIMessage[]): boolean {
+  if (a.length !== b.length) return false;
+
+  for (let i = 0; i < a.length; i++) {
+    const left = a[i];
+    const right = b[i];
+
+    if (left.role !== right.role) return false;
+    if (textFromParts(left) !== textFromParts(right)) return false;
+  }
+
+  return true;
+}
 
 export function ChatDemo(props: ChatProps) {
   const [input, setInput] = useState('');
@@ -68,6 +94,7 @@ export function ChatDemo(props: ChatProps) {
     status,
     setMessages,
   } = context?.chat ?? localChat;
+  const clearHistory = context?.clearHistory;
 
   const isLoading = status === 'submitted' || status === 'streaming';
 
@@ -150,7 +177,14 @@ export function ChatDemo(props: ChatProps) {
   };
 
   const clearChat = () => {
-    setMessages(() => []);
+    stop();
+
+    if (clearHistory) {
+      clearHistory();
+    } else {
+      setMessages(() => []);
+    }
+
     setInput('');
 
     try {
@@ -227,6 +261,7 @@ export function AISearchInput(props: ComponentProps<'form'>) {
 export function AISearch({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const hasLoadedHistoryRef = useRef(false);
+  const suppressPersistOnceRef = useRef(false);
   const historyKey = useMemo(() => {
     if (typeof window === 'undefined') return 'docs-ai-chat-history';
 
@@ -239,28 +274,56 @@ export function AISearch({ children }: { children: ReactNode }) {
       api: '/api/chat',
     }),
   });
+  const { messages, setMessages } = chat;
+
+  const clearHistory = useCallback(() => {
+    suppressPersistOnceRef.current = true;
+    setMessages(() => []);
+
+    try {
+      window.sessionStorage.removeItem(historyKey);
+    } catch {
+      // Keep UI clear even if storage access fails.
+    }
+  }, [historyKey, setMessages]);
 
   useEffect(() => {
+    if (hasLoadedHistoryRef.current) return;
+
     try {
       const stored = window.sessionStorage.getItem(historyKey);
       if (!stored) return;
 
       const parsed = JSON.parse(stored) as DocsChatUIMessage[];
       if (Array.isArray(parsed) && parsed.length > 0) {
-        chat.setMessages(parsed);
+        if (!areMessagesEquivalent(parsed, messages)) {
+          setMessages(parsed);
+        }
       }
     } catch {
       // Ignore malformed history payloads.
     } finally {
       hasLoadedHistoryRef.current = true;
     }
-  }, [chat, historyKey]);
+  }, [historyKey, messages, setMessages]);
 
   useEffect(() => {
     if (!hasLoadedHistoryRef.current) return;
 
+    if (suppressPersistOnceRef.current) {
+      suppressPersistOnceRef.current = false;
+
+      try {
+        window.sessionStorage.removeItem(historyKey);
+      } catch {
+        // Keep chat functional even when storage access fails.
+      }
+
+      return;
+    }
+
     try {
-      const trimmed = chat.messages
+      const trimmed = messages
         .filter((message) => message.role === 'user' || message.role === 'assistant')
         .slice(-CHAT_HISTORY_LIMIT)
         .map((message) => ({
@@ -278,10 +341,12 @@ export function AISearch({ children }: { children: ReactNode }) {
     } catch {
       // Keep chat functional even when storage access fails.
     }
-  }, [chat.messages, historyKey]);
+  }, [historyKey, messages]);
 
   return (
-    <Context value={useMemo(() => ({ chat, open, setOpen }), [chat, open])}>{children}</Context>
+    <Context value={useMemo(() => ({ chat, open, setOpen, clearHistory }), [chat, clearHistory, open])}>
+      {children}
+    </Context>
   );
 }
 

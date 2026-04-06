@@ -141,10 +141,22 @@ function stringifyDocField(value: unknown): string {
   return typeof value === 'string' ? value.trim() : '';
 }
 
+function normalizeSourceKey(url: string | undefined, title: string): string {
+  return (url ?? title).trim().toLowerCase();
+}
+
 interface SourceItem {
   id: string;
   title: string;
   url?: string;
+}
+
+function toMarkdownLink(title: string, url?: string): string {
+  return url ? `[${title}](${url})` : title;
+}
+
+function buildCitationList(sources: SourceItem[]): string {
+  return sources.map((source) => `- ${toMarkdownLink(source.title, source.url)}`).join('\n');
 }
 
 interface ContextPayload {
@@ -163,13 +175,14 @@ async function buildOramaContext(query: string): Promise<ContextPayload> {
     });
 
     const sources: SourceItem[] = [];
+    const seen = new Set<string>();
 
     const snippets = result.hits
       .map((hit, idx) => {
         const doc = hit.document as Record<string, unknown>;
-        const id = `S${idx + 1}`;
         const title = stringifyDocField(doc.title) || `Result ${idx + 1}`;
         const url = stringifyDocField(doc.url) || stringifyDocField(doc.path);
+        const sourceKey = normalizeSourceKey(url || undefined, title);
         const body =
           stringifyDocField(doc.content) ||
           stringifyDocField(doc.text) ||
@@ -178,10 +191,14 @@ async function buildOramaContext(query: string): Promise<ContextPayload> {
 
         if (!body && !url) return null;
 
+        if (seen.has(sourceKey)) return null;
+        seen.add(sourceKey);
+
+        const id = `S${sources.length + 1}`;
         sources.push({ id, title, url: url || undefined });
 
         return [
-          `### [${id}] ${title}`,
+          `### ${title}${url ? ` (${url})` : ''}`,
           url ? `Source: ${url}` : 'Source: internal documentation index',
           body.slice(0, 1200),
         ]
@@ -215,10 +232,10 @@ function buildSystemPrompt(context: string | null, sources: SourceItem[]): strin
   }
 
   const sourceMap = sources
-    .map((source) => (source.url ? `- [${source.id}] ${source.title} - ${source.url}` : `- [${source.id}] ${source.title}`))
+    .map((source) => (source.url ? `- [${source.title}](${source.url})` : `- ${source.title}`))
     .join('\n');
 
-  return `${base}\n${languageRules}\n\nUse the indexed documentation context below as the primary source of truth.\nCitation rules:\n- Use inline citations like [S1] when a claim is grounded in context.\n- End every answer with a section titled "Sources".\n- In the "Sources" section, list only sources you actually used.\n- If no sources were used, write "Sources: None".\n\nAvailable sources:\n${sourceMap}\n\nContext:\n${context}`;
+  return `${base}\n${languageRules}\n\nUse the indexed documentation context below as the primary source of truth.\nCitation rules:\n- Do not use labels like [S1] or [S3].\n- If you cite a source inline, use a markdown link to the docs page, for example [The Basics](/the-basics).\n- End every answer with a section titled "Sources".\n- In the "Sources" section, list each docs page only once using markdown links.\n- If no sources were used, write "Sources: None".\n\nAvailable sources:\n${sourceMap}\n\nContext:\n${context}`;
 }
 
 async function createCerebrasResponse(reqJson: { messages: unknown[]; model?: string }) {
@@ -315,12 +332,6 @@ async function createCerebrasResponse(reqJson: { messages: unknown[]; model?: st
         break;
       }
     }
-  }
-
-  if (isModelNotFoundError(lastError)) {
-    throw new Error(
-      `No available Cerebras model found. Tried: ${models.join(', ')}. Set CEREBRAS_MODEL to a model available in your account.`,
-    );
   }
 
   throw lastError;
