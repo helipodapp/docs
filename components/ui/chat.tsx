@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { Bot, Check, Copy, Send, Square, Trash2 } from 'lucide-react';
+import { Bot, Check, ChevronDown, Copy, Send, Square, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { buttonVariants } from '@/components/ui/button';
 import { Markdown } from '@/components/markdown';
@@ -102,10 +102,10 @@ function normalizeAssistantSources(text: string): string {
       if (sourcesHeader) {
         inSourcesSection = true;
         const rest = sourcesHeader[1].trim();
-        if (!rest) return 'Sources:';
+        if (!rest) return '';
 
         const parts = rest.split(',').map((part) => linkifySourceValue(part.trim()));
-        return `Sources: ${parts.join(', ')}`;
+        return parts.join(' ');
       }
 
       if (!inSourcesSection) return line;
@@ -123,12 +123,44 @@ function normalizeAssistantSources(text: string): string {
 
       const bulletMatch = line.match(/^(\s*[-*]\s+)(.+)$/);
       if (bulletMatch) {
-        return `${bulletMatch[1]}${linkifySourceValue(bulletMatch[2])}`;
+        return linkifySourceValue(bulletMatch[2]);
       }
 
       return linkifySourceValue(line);
     })
     .join('\n');
+}
+
+function prettifySourceLabels(text: string): string {
+  return text.replace(/\[([^\]]+)\]\((\/[^\)\s]+)\)/g, (_full, label: string, href: string) => {
+    if (label.trim() !== href.trim()) return `[${label}](${href})`;
+
+    const cleaned = href
+      .replace(/^\/+/, '')
+      .split(/[?#]/)[0]
+      .split('/')
+      .filter(Boolean)
+      .join(' / ')
+      .replace(/[-_]+/g, ' ')
+      .trim();
+
+    if (!cleaned) return `[Home](${href})`;
+
+    const pretty = cleaned
+      .split(' ')
+      .map((word) => (word ? word[0].toUpperCase() + word.slice(1) : word))
+      .join(' ');
+
+    return `[${pretty}](${href})`;
+  });
+}
+
+function prepareAssistantText(text: string): string {
+  return prettifySourceLabels(normalizeAssistantSources(text));
+}
+
+function isNearBottom(element: HTMLDivElement, threshold = 120): boolean {
+  return element.scrollHeight - element.scrollTop - element.clientHeight <= threshold;
 }
 
 export function Chat<TMessage extends ChatMessage>({
@@ -146,6 +178,7 @@ export function Chat<TMessage extends ChatMessage>({
 }: ChatProps<TMessage>) {
   const listRef = useRef<HTMLDivElement>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [showScrollToBottom, setShowScrollToBottom] = useState(false);
 
   useEffect(() => {
     const el = listRef.current;
@@ -156,7 +189,24 @@ export function Chat<TMessage extends ChatMessage>({
       top: el.scrollHeight,
       behavior,
     });
-  }, [messages.length, isGenerating]);
+    setShowScrollToBottom(false);
+  }, [messages.length]);
+
+  useEffect(() => {
+    const el = listRef.current;
+    if (!el) return;
+
+    const onScroll = () => {
+      setShowScrollToBottom(!isNearBottom(el));
+    };
+
+    onScroll();
+    el.addEventListener('scroll', onScroll, { passive: true });
+
+    return () => {
+      el.removeEventListener('scroll', onScroll);
+    };
+  }, []);
 
   const copyText = async (id: string, value: string) => {
     if (!value.trim()) return;
@@ -173,7 +223,7 @@ export function Chat<TMessage extends ChatMessage>({
   };
 
   return (
-    <div className={cn('flex h-full min-h-0 flex-col rounded-xl border bg-fd-card shadow-sm', className)}>
+    <div className={cn('relative flex h-full min-h-0 flex-col rounded-xl border bg-fd-card shadow-sm', className)}>
       <div ref={listRef} className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-3">
         {messages.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-3 rounded-lg border border-dashed p-6 text-center">
@@ -199,7 +249,7 @@ export function Chat<TMessage extends ChatMessage>({
             .filter((message) => message.role !== 'system')
             .map((message) => {
               const text = textFromMessage(message);
-              const assistantText = message.role === 'assistant' ? normalizeAssistantSources(text) : text;
+              const assistantText = message.role === 'assistant' ? prepareAssistantText(text) : text;
               const isUser = message.role === 'user';
               const roleLabel = isUser ? 'You' : 'Assistant';
               const timeLabel = formatTimestamp(message.createdAt);
@@ -227,7 +277,7 @@ export function Chat<TMessage extends ChatMessage>({
                       {isUser ? (
                         <p className="whitespace-pre-wrap text-sm leading-6">{text || '...'}</p>
                       ) : (
-                        <div className="max-w-none text-sm leading-6 [&_p]:text-sm [&_li]:text-sm [&_code]:text-[13px] [&_pre]:my-2 [&_pre]:text-[13px] [&_pre]:leading-6 [&_code]:before:content-none [&_code]:after:content-none [&_a]:inline-flex [&_a]:items-center [&_a]:gap-1 [&_a]:rounded-full [&_a]:border [&_a]:border-fd-primary/25 [&_a]:bg-fd-primary/10 [&_a]:px-2 [&_a]:py-0.5 [&_a]:text-xs [&_a]:font-medium [&_a]:text-fd-primary [&_a]:no-underline hover:[&_a]:bg-fd-primary/15">
+                        <div className="max-w-none text-sm leading-6 [&_p]:text-sm [&_li]:text-sm [&_code]:text-[13px] [&_pre]:my-2 [&_pre]:text-[13px] [&_pre]:leading-6 [&_code]:before:content-none [&_code]:after:content-none [&_a]:inline-flex [&_a]:align-middle [&_a]:items-center [&_a]:max-w-52 [&_a]:overflow-hidden [&_a]:text-ellipsis [&_a]:whitespace-nowrap [&_a]:rounded-full [&_a]:border [&_a]:border-fd-primary/25 [&_a]:bg-fd-primary/10 [&_a]:px-2 [&_a]:py-0.5 [&_a]:text-xs [&_a]:leading-4 [&_a]:font-medium [&_a]:text-fd-primary [&_a]:no-underline hover:[&_a]:bg-fd-primary/15">
                           <Markdown text={assistantText || '...'} />
                         </div>
                       )}
@@ -278,6 +328,26 @@ export function Chat<TMessage extends ChatMessage>({
           </div>
         ) : null}
       </div>
+
+      {showScrollToBottom ? (
+        <button
+          type="button"
+          aria-label="Scroll to latest message"
+          className={cn(
+            buttonVariants({ variant: 'secondary', size: 'icon' }),
+            'absolute bottom-28 right-4 z-10 h-8 w-8 rounded-full shadow-md',
+          )}
+          onClick={() => {
+            const el = listRef.current;
+            if (!el) return;
+
+            el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+            setShowScrollToBottom(false);
+          }}
+        >
+          <ChevronDown className="size-4" />
+        </button>
+      ) : null}
 
       <div className="border-t p-2">
         <form onSubmit={handleSubmit} className="space-y-2">

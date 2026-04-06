@@ -29,7 +29,7 @@ export default async function Page(props: PageProps<'/blog/[slug]'>) {
 
   if (!page) notFound();
 
-  const pageData = page.data as Record<string, unknown>;
+  const pageData = page.data as unknown as Record<string, unknown>;
   const loadedData =
     typeof pageData.load === 'function'
       ? await (pageData.load as () => Promise<LoadedBlogData>)()

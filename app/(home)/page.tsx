@@ -66,7 +66,7 @@ const cardVariants = cva('rounded-2xl text-sm p-6 bg-origin-border shadow-lg', {
 export default function Page() {
   return (
     <main className="text-landing-foreground pt-4 pb-6 dark:text-landing-foreground-dark md:pb-12">
-      <div className="relative flex min-h-[600px] h-[70vh] max-h-[900px] border rounded-2xl overflow-hidden mx-auto w-full max-w-[1400px] bg-origin-border">
+      <div className="relative flex min-h-150 h-[70vh] max-h-225 border rounded-2xl overflow-hidden mx-auto w-full max-w-350 bg-origin-border">
         <Hero />
         <div className="flex flex-col z-2 px-4 size-full md:p-12 max-md:items-center max-md:text-center">
           <p className="mt-12 text-xs text-brand font-medium rounded-full p-2 border border-brand/50 w-fit">
@@ -93,7 +93,7 @@ export default function Page() {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-10 mt-12 px-6 mx-auto w-full max-w-[1400px] md:px-12 lg:grid-cols-2 lg:mt-20">
+      <div className="grid grid-cols-1 gap-10 mt-12 px-6 mx-auto w-full max-w-350 md:px-12 lg:grid-cols-2 lg:mt-20">
         <p className="text-2xl tracking-tight leading-snug font-light col-span-full md:text-3xl xl:text-4xl">
           Fumadocs is a <span className="text-brand font-medium">React.js</span> documentation
           framework for <span className="text-brand font-medium">Developers</span>, beautifully
@@ -107,7 +107,7 @@ export default function Page() {
             alt=""
             className="absolute inset-0 size-full object-top object-cover -z-1"
           />
-          <div className="mx-auto w-full max-w-[800px] p-2 bg-fd-card text-fd-card-foreground border rounded-2xl shadow-lg">
+          <div className="mx-auto w-full max-w-200 p-2 bg-fd-card text-fd-card-foreground border rounded-2xl shadow-lg">
             <div className="flex flex-row gap-2">
               <h2 className="text-brand content-center font-mono font-bold uppercase border-2 border-brand/50 px-2 rounded-xl">
                 Try it out
@@ -146,14 +146,14 @@ export default function Page() {
 
 function Story() {
   return (
-    <div className="relative col-span-full min-h-[570px] px-2 py-6 rounded-2xl z-2 border shadow-md">
+    <div className="relative col-span-full min-h-142.5 px-2 py-6 rounded-2xl z-2 border shadow-md">
       <Image
         src={StoryImage}
         alt=""
         className="absolute inset-0 size-full -z-1 pointer-events-none object-cover object-top rounded-2xl"
       />
 
-      <div className="w-full m-auto max-w-[500px] text-start shadow-xl p-2 bg-fd-card/80 backdrop-blur-md rounded-xl border shadow-black/50 dark:bg-fd-card/50">
+      <div className="w-full m-auto max-w-125 text-start shadow-xl p-2 bg-fd-card/80 backdrop-blur-md rounded-xl border shadow-black/50 dark:bg-fd-card/50">
         <div className="pt-3 px-3">
           <h2
             className={cn(
@@ -631,7 +631,7 @@ export const source = loader({
         />
       </div>
       <div
-        className={cn(cardVariants({ className: 'relative overflow-hidden min-h-[400px] z-2' }))}
+        className={cn(cardVariants({ className: 'relative overflow-hidden min-h-100 z-2' }))}
       >
         <Image
           src={Bg2Image}
@@ -787,8 +787,8 @@ function OpenSource() {
         <p className="text-center font-mono text-xs opacity-50 mb-8">
           light and gorgeous, just like the moon.
         </p>
-        <div className="h-[200px] mt-auto overflow-hidden p-8 bg-gradient-to-b from-brand-secondary/10">
-          <div className="mx-auto bg-radial-[circle_at_0%_100%] from-60% from-transparent to-brand-secondary size-[500px] rounded-full" />
+        <div className="h-50 mt-auto overflow-hidden p-8 bg-linear-to-b from-brand-secondary/10">
+          <div className="mx-auto bg-radial-[circle_at_0%_100%] from-60% from-transparent to-brand-secondary size-125 rounded-full" />
         </div>
       </div>
 

@@ -6,8 +6,8 @@ import Logo from '@/public/logo.webp';
 
 export function UwuHero() {
   return (
-    <div className="z-2 hidden flex-col items-center pb-8 text-center bg-fd-background border-x border-t [.uwu_&]:flex">
-      <Image alt="logo" src={Logo} className="mb-6 w-full max-w-[400px] px-4" priority />
+    <div className="z-2 hidden flex-col items-center pb-8 text-center bg-fd-background border-x border-t in-[.uwu]:flex">
+      <Image alt="logo" src={Logo} className="mb-6 w-full max-w-100 px-4" priority />
 
       <p className="mb-6 h-fit p-2 text-lg text-fd-muted-foreground md:max-w-[80%] md:text-xl">
         Fumadocs is the framework for building documentation with{' '}
