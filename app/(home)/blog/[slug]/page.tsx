@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import type { ComponentType } from 'react';
 import { InlineTOC } from 'fumadocs-ui/components/inline-toc';
+import type { TOCItemType } from 'fumadocs-core/toc';
 import { blog } from '@/lib/source';
 import { createMetadata } from '@/lib/metadata';
 import { buttonVariants } from '@/components/ui/button';
@@ -10,26 +12,45 @@ import { getMDXComponents } from '@/components/mdx';
 import path from 'node:path';
 import { cn } from '@/lib/cn';
 
+type LoadedBlogData = {
+  body: ComponentType<{ components?: ReturnType<typeof getMDXComponents> }>;
+  toc?: TOCItemType[];
+};
+
+type BlogFrontmatter = {
+  author?: string;
+  date?: string | Date;
+};
+
 export default async function Page(props: PageProps<'/blog/[slug]'>) {
   const params = await props.params;
   const page = blog.getPage([params.slug]);
   const components = getMDXComponents();
 
   if (!page) notFound();
-  const { body: Mdx, toc } = await page.data.load();
+
+  const pageData = page.data as Record<string, unknown>;
+  const loadedData =
+    typeof pageData.load === 'function'
+      ? await (pageData.load as () => Promise<LoadedBlogData>)()
+      : (pageData as unknown as LoadedBlogData);
+
+  const Mdx = loadedData.body;
+  const toc = Array.isArray(loadedData.toc) ? loadedData.toc : [];
+  const frontmatter = page.data as BlogFrontmatter;
 
   return (
-    <article className="flex flex-col mx-auto w-full max-w-[800px] px-4 py-8">
+    <article className="flex flex-col mx-auto w-full max-w-200 px-4 py-8">
       <div className="flex flex-row gap-4 text-sm mb-8">
         <div>
           <p className="mb-1 text-fd-muted-foreground">Written by</p>
-          <p className="font-medium">{page.data.author}</p>
+          <p className="font-medium">{frontmatter.author ?? 'Unknown'}</p>
         </div>
         <div>
           <p className="mb-1 text-sm text-fd-muted-foreground">At</p>
           <p className="font-medium">
             {new Date(
-              page.data.date ?? path.basename(page.path, path.extname(page.path)),
+              frontmatter.date ?? path.basename(page.path, path.extname(page.path)),
             ).toDateString()}
           </p>
         </div>

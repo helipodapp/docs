@@ -14,13 +14,21 @@ export async function getLLMText(page: Page) {
       cli: 'Helipod CLI (the CLI tool for automating Helipod apps)',
     }[section] ?? section;
 
-  const processed = await page.data.getText('processed');
+  const data = page.data as {
+    getText?: (kind: 'processed' | 'raw') => Promise<string> | string;
+    title?: string;
+    description?: string;
+  };
 
-  return `# ${category}: ${page.data.title}
+  const processed = typeof data.getText === 'function' ? await data.getText('processed') : '';
+  const title = data.title ?? page.url;
+  const description = data.description ?? '';
+
+  return `# ${category}: ${title}
 URL: ${page.url}
 Source: https://raw.githubusercontent.com/helipodapp/docs/refs/heads/main/content/docs/${page.path}
 
-${page.data.description ?? ''}
+${description}
         
 ${processed}`;
 }

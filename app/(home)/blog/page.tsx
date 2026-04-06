@@ -8,11 +8,14 @@ function getName(path: string) {
   return PathUtils.basename(path, PathUtils.extname(path));
 }
 
+function getPostDate(post: { path: string; data: unknown }): Date {
+  const data = post.data as { date?: string | Date };
+  return new Date(data.date ?? getName(post.path));
+}
+
 export default function Page() {
   const posts = [...blog.getPages()].sort(
-    (a, b) =>
-      new Date(b.data.date ?? getName(b.path)).getTime() -
-      new Date(a.data.date ?? getName(a.path)).getTime(),
+    (a, b) => getPostDate(b).getTime() - getPostDate(a).getTime(),
   );
 
   return (
@@ -42,7 +45,7 @@ export default function Page() {
             <p className="text-sm text-fd-muted-foreground">{post.data.description}</p>
 
             <p className="mt-auto pt-4 text-xs text-brand">
-              {new Date(post.data.date ?? getName(post.path)).toDateString()}
+              {getPostDate(post).toDateString()}
             </p>
           </Link>
         ))}

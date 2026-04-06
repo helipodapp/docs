@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const InkeepRecordTypes = z.enum([
+const ProviderRecordTypes = z.enum([
   'documentation',
   'site',
   'discourse_post',
@@ -13,7 +13,7 @@ const InkeepRecordTypes = z.enum([
 ]);
 
 const LinkType = z.union([
-  InkeepRecordTypes,
+  ProviderRecordTypes,
   z.string(), // catch all
 ]);
 
@@ -27,7 +27,7 @@ const LinkSchema = z.looseObject({
 
 const LinksSchema = z.array(LinkSchema).nullish();
 
-export const ProvideLinksToolSchema = z.object({
+export const ProvideReferenceLinksToolSchema = z.object({
   links: LinksSchema,
 });
 

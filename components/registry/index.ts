@@ -48,7 +48,7 @@ export const registry: Registry = {
 
     // Optional AI route handlers (not packaged in standalone builds)
     if (filePath === 'lib/openrouter/route.ts') return false;
-    if (filePath === 'lib/inkeep/route.ts') return false;
+    if (filePath === 'lib/ai/chat-route.ts') return false;
 
     // source object is external
     if (filePath.startsWith('lib/source/')) return false;
@@ -167,25 +167,50 @@ export const registry: Registry = {
       ],
     },
     {
-      name: 'ai/inkeep',
-      title: 'AI Chat (Next.js + Inkeep AI)',
-      description: 'Ask AI dialog for your docs, requires Inkeep AI',
+      name: 'ai/multi-provider',
+      title: 'AI Chat (Next.js + Multi Provider)',
+      description: 'Ask AI dialog for your docs, provider-agnostic setup',
       files: [
         {
           type: 'components',
-          path: 'components/inkeep/search.tsx',
+          path: 'components/ai/search.tsx',
           target: '<dir>/ai/search.tsx',
         },
         // Note: route-handler type not supported in standalone builds
         // {
         //   type: 'route-handler',
         //   route: 'api/chat',
-        //   path: 'lib/inkeep/route.ts',
+        //   path: 'lib/ai/chat-route.ts',
         // },
         {
           type: 'lib',
-          path: 'lib/inkeep/inkeep-qa-schema.ts',
-          target: '<dir>/ai/inkeep-qa-schema.ts',
+          path: 'lib/ai/provider-links-schema.ts',
+          target: '<dir>/ai/provider-links-schema.ts',
+        },
+        {
+          type: 'components',
+          path: 'components/ui/chat.tsx',
+          target: '<dir>/ui/chat.tsx',
+        },
+        {
+          type: 'components',
+          path: 'components/ui/select.tsx',
+          target: '<dir>/ui/select.tsx',
+        },
+        {
+          type: 'components',
+          path: 'components/ui/button.tsx',
+          target: '<dir>/ui/button.tsx',
+        },
+        {
+          type: 'lib',
+          path: 'lib/utils.ts',
+          target: '<dir>/lib/utils.ts',
+        },
+        {
+          type: 'lib',
+          path: 'lib/utils/audio.ts',
+          target: '<dir>/lib/utils/audio.ts',
         },
       ],
     },

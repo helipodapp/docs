@@ -8,11 +8,11 @@
 
 @theme {
   --spacing-page: 1436px;
-  --color-brand: hsl(145, 62%, 36%);
+  --color-brand: hsl(145, 58%, 29%);
   --color-brand-foreground: white;
-  --color-brand-secondary: #d7f5e4;
-  --color-brand-secondary-foreground: #0f5132;
-  --color-brand-200: hsl(145, 55%, 45%);
+  --color-brand-secondary: #c7ecd9;
+  --color-brand-secondary-foreground: #0a3f27;
+  --color-brand-200: hsl(145, 52%, 40%);
 
   --color-landing-foreground: #1f5139;
   --color-landing-foreground-200: #5d9b7c;
@@ -93,10 +93,10 @@
 }
 
 :root {
-  --helipod-color: hsl(145, 62%, 36%);
-  --helipod-ring: hsl(145 62% 42%);
+  --helipod-color: hsl(145, 58%, 29%);
+  --helipod-ring: hsl(145 58% 35%);
   --headless-color: hsl(250, 80%, 54%);
-  --framework-color: hsl(145, 62%, 36%);
+  --framework-color: hsl(145, 58%, 29%);
   --ui-color: hsl(217, 100%, 58%);
   --color-fd-primary: var(--helipod-color);
   --color-fd-ring: var(--helipod-ring);
@@ -115,10 +115,10 @@ body {
 }
 
 .dark {
-  --helipod-color: hsl(145 72% 66%);
-  --helipod-ring: hsl(145 72% 72%);
+  --helipod-color: hsl(145 64% 55%);
+  --helipod-ring: hsl(145 64% 61%);
   --headless-color: hsl(250 100% 80%);
-  --framework-color: hsl(145 72% 66%);
+  --framework-color: hsl(145 64% 55%);
   --ui-color: #a9ceff;
   --color-fd-primary: var(--helipod-color);
   --color-fd-ring: var(--helipod-ring);

@@ -1,15 +1,17 @@
 import { DataSourceId, orama } from '@/lib/orama/client';
 import { createMcpHandler } from 'mcp-handler';
 import { z } from 'zod';
-import { ProvideLinksToolSchema } from '@/lib/inkeep/inkeep-qa-schema';
+import { ProvideReferenceLinksToolSchema } from '@/lib/ai/provider-links-schema';
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import { generateText } from 'ai';
 
 const openai = createOpenAICompatible({
-  name: 'inkeep',
-  apiKey: process.env.INKEEP_API_KEY,
-  baseURL: 'https://api.inkeep.com/v1',
+  name: 'ai-provider',
+  apiKey: process.env.AI_PROVIDER_API_KEY ?? process.env.CEREBRAS_API_KEY ?? process.env.INKEEP_API_KEY,
+  baseURL: process.env.AI_PROVIDER_BASE_URL ?? process.env.CEREBRAS_BASE_URL ?? 'https://api.cerebras.ai/v1',
 });
+
+const askAiModel = process.env.AI_PROVIDER_MODEL ?? process.env.CEREBRAS_MODEL ?? 'llama3.1-8b';
 
 const handler = createMcpHandler(
   (server) => {
@@ -49,10 +51,10 @@ const handler = createMcpHandler(
       },
       async ({ message }) => {
         const result = await generateText({
-          model: openai('inkeep-qa-sonnet-4'),
+          model: openai(askAiModel),
           tools: {
             provideLinks: {
-              inputSchema: ProvideLinksToolSchema,
+              inputSchema: ProvideReferenceLinksToolSchema,
             },
           },
           messages: [

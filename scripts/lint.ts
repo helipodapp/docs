@@ -46,7 +46,15 @@ async function checkLinks() {
 
 async function getHeadings({ data }: InferPageType<AnySource>): Promise<string[]> {
   if ('type' in data && data.type === 'openapi') return [];
-  const { _exports, toc } = await data.load();
+
+  const docsData = data as {
+    load?: () => Promise<{ _exports?: { elementIds?: unknown }; toc?: Array<{ url: string }> }>;
+    toc?: Array<{ url: string }>;
+    _exports?: { elementIds?: unknown };
+  };
+
+  const loaded = typeof docsData.load === 'function' ? await docsData.load() : docsData;
+  const { _exports, toc = [] } = loaded;
   const headings = toc.map((item) => item.url.slice(1));
   const elementIds = _exports?.elementIds;
   if (Array.isArray(elementIds)) {
@@ -61,11 +69,16 @@ async function getFiles(source: AnySource) {
   for (const page of source.getPages()) {
     if ('type' in page.data && page.data.type === 'openapi') continue;
 
+    const docsData = page.data as {
+      getText?: (kind: 'raw' | 'processed') => Promise<string> | string;
+      info?: { fullPath: string };
+    };
+
     files.push({
       data: page.data,
       url: page.url,
-      path: page.data.info.fullPath,
-      content: await page.data.getText('raw'),
+      path: docsData.info?.fullPath ?? page.path,
+      content: typeof docsData.getText === 'function' ? await docsData.getText('raw') : '',
     });
   }
 

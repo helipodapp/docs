@@ -19,10 +19,23 @@ import type { Nodes } from 'hast';
  */
 export async function getLLMText(page: Page) {
   if (page.data.type === 'openapi') return '';
-  const tree = await page.data.getMDAST();
+  const data = page.data as {
+    getMDAST?: () => Promise<unknown>;
+    getText?: (kind: 'processed' | 'raw') => Promise<string> | string;
+  };
+
+  if (typeof data.getMDAST !== 'function') {
+    if (typeof data.getText === 'function') {
+      return await data.getText('processed');
+    }
+
+    return '';
+  }
+
+  const tree = await data.getMDAST();
   const tasks: Promise<void>[] = [];
 
-  visit(tree, (node) => {
+  visit(tree as Parameters<typeof visit>[0], (node) => {
     if (node.type === 'mdxJsxFlowElement' || node.type === 'mdxFlowExpression') {
       const context = {
         React,

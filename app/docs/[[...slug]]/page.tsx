@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { type ComponentProps, type FC, type ReactNode } from 'react';
+import { type ComponentProps, type ComponentType, type FC, type ReactNode } from 'react';
 import * as Twoslash from 'fumadocs-twoslash/ui';
 import { Callout } from 'fumadocs-ui/components/callout';
 import { TypeTable } from 'fumadocs-ui/components/type-table';
@@ -28,6 +28,16 @@ import {
 import { NotFound } from '@/components/layouts/not-found';
 import { getSuggestions } from './suggestions';
 import { PathUtils } from 'fumadocs-core/source';
+import type { TOCItemType } from 'fumadocs-core/toc';
+
+type LoadedDocsData = {
+  body: ComponentType<{ components?: ReturnType<typeof getMDXComponents> }>;
+  toc?: TOCItemType[];
+  lastModified?: Date;
+  preview?: string;
+  index?: boolean;
+  load?: () => Promise<LoadedDocsData>;
+};
 
 function PreviewRenderer({ preview }: { preview: string }): ReactNode {
   if (preview && preview in Preview) {
@@ -64,7 +74,13 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
     );
   }
 
-  const { body: Mdx, toc, lastModified } = await page.data.load();
+  const docsData = page.data as unknown as LoadedDocsData;
+  const loadedDocsData =
+    typeof docsData.load === 'function' ? await docsData.load() : docsData;
+
+  const Mdx = loadedDocsData.body;
+  const toc = loadedDocsData.toc ?? [];
+  const lastModified = loadedDocsData.lastModified;
 
   return (
     <DocsPage
@@ -83,7 +99,7 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
         />
       </div>
       <div className="prose flex-1 text-fd-foreground/90">
-        {page.data.preview && <PreviewRenderer preview={page.data.preview} />}
+        {loadedDocsData.preview && <PreviewRenderer preview={loadedDocsData.preview} />}
         <Mdx
           components={getMDXComponents({
             ...Twoslash,
@@ -126,7 +142,7 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
             Customisation,
           })}
         />
-        {page.data.index ? <DocsCategory url={page.url} /> : null}
+        {loadedDocsData.index ? <DocsCategory url={page.url} /> : null}
       </div>
       <Feedback endpoint="/api/feedback" />
       {lastModified && <PageLastUpdate date={lastModified} />}

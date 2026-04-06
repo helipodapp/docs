@@ -1,23 +1,33 @@
-import { source } from '@/lib/source';
+import { loader } from 'fumadocs-core/source';
 import { exportEpub } from 'fumadocs-epub';
+import { docs } from 'collections/server';
 
 export const revalidate = false;
 
+const epubSource = loader(docs.toFumadocsSource(), {
+  baseUrl: '/',
+});
+
+type EpubPageData = {
+  getText?: (kind: 'raw') => string;
+};
+
 export async function GET(): Promise<Response> {
   const buffer = await exportEpub({
-    source,
+    source: epubSource,
     getMarkdown(page) {
-      if (page.data.type === 'docs') return page.data.getText('raw');
+      const data = page.data as EpubPageData;
+      return data.getText?.('raw');
     },
-    title: 'Fumadocs Documentation',
+    title: 'Helipod Documentation',
     author: 'Fuma Nama',
-    description: 'Documentation for Fumadocs - the React.js documentation framework',
+    description: 'Documentation for Helipod - the all-in-one documentation framework',
     cover: '/og.png',
   });
   return new Response(new Uint8Array(buffer), {
     headers: {
       'Content-Type': 'application/epub+zip',
-      'Content-Disposition': 'attachment; filename="fumadocs-docs.epub"',
+      'Content-Disposition': 'attachment; filename="helipod-docs.epub"',
     },
   });
 }

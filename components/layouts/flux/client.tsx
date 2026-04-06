@@ -14,7 +14,7 @@ import {
   AISearchPanelList,
   useAISearchContext,
   useHotKey,
-} from '@/components/inkeep/search';
+} from '@/components/ai/search';
 import { MessageCircleIcon } from 'lucide-react';
 import { buttonVariants } from 'fumadocs-ui/components/ui/button';
 import { cn } from '@/lib/cn';
@@ -66,7 +66,7 @@ function CustomNavigationPanel({ tool, ...props }: NavigationPanelProps) {
         <AnimatePresence>
           {ai.open && (
             <motion.div
-              className="flex flex-col size-full mx-auto sm:max-w-[380px]"
+              className="flex flex-col size-full mx-auto sm:max-w-95"
               variants={{
                 show: {
                   y: 0,

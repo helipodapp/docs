@@ -5,6 +5,11 @@ import { getSection } from '@/lib/source/navigation';
 
 export const revalidate = false;
 
+type DocsStaticData = {
+  load?: () => Promise<{ structuredData?: unknown }>;
+  structuredData?: unknown;
+};
+
 export async function GET(): Promise<Response> {
   const pages = source.getPages();
   const promises = pages.map(async (page) => {
@@ -15,9 +20,12 @@ export async function GET(): Promise<Response> {
       includeRoot: true,
     });
 
+    const data = page.data as unknown as DocsStaticData;
+    const loaded = typeof data.load === 'function' ? await data.load() : data;
+
     return {
       id: page.url,
-      structured: (await page.data.load()).structuredData,
+      structured: loaded.structuredData,
       tag: getSection(page.slugs[0]),
       url: page.url,
       title: page.data.title,
