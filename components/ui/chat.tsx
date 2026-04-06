@@ -227,7 +227,7 @@ export function Chat<TMessage extends ChatMessage>({
                       {isUser ? (
                         <p className="whitespace-pre-wrap text-sm leading-6">{text || '...'}</p>
                       ) : (
-                        <div className="max-w-none text-sm leading-6 [&_p]:text-sm [&_li]:text-sm [&_code]:text-[13px] [&_pre]:my-2 [&_pre]:text-[13px] [&_pre]:leading-6 [&_code]:before:content-none [&_code]:after:content-none">
+                        <div className="max-w-none text-sm leading-6 [&_p]:text-sm [&_li]:text-sm [&_code]:text-[13px] [&_pre]:my-2 [&_pre]:text-[13px] [&_pre]:leading-6 [&_code]:before:content-none [&_code]:after:content-none [&_a]:inline-flex [&_a]:items-center [&_a]:gap-1 [&_a]:rounded-full [&_a]:border [&_a]:border-fd-primary/25 [&_a]:bg-fd-primary/10 [&_a]:px-2 [&_a]:py-0.5 [&_a]:text-xs [&_a]:font-medium [&_a]:text-fd-primary [&_a]:no-underline hover:[&_a]:bg-fd-primary/15">
                           <Markdown text={assistantText || '...'} />
                         </div>
                       )}
